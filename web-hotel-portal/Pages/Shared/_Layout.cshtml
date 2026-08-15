@@ -7,40 +7,43 @@
     <link rel="icon" type="image/png" href="~/img/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
     <!-- impeccable:direction
-    THESIS: web-hotel-portal inherits the institutional site's Hotel Switchboard world; this surface adapts it from Persuade to Operate — a staff console, not a pitch.
-    OWN-WORLD: same dark walnut/bakelite panel + brass + reserved orange system, on cream docket-paper for dense work areas; Oswald/Spectral/JetBrains Mono unchanged.
-    STORY: staff scan the activity catalog as pinned docket cards, open one to manage its time slots, and read reservations as a ruled ledger.
-    FIRST VIEWPORT: (per-page; see Activities.cshtml) a docket-card wall on the paper ground, not a table-of-icons scaffold.
-    FORM: Docket Card Wall, dealt index 7 of a surface-scope roll (seed key 0d92a621), raised with a "card edits toward its detail in place" discipline from a competitive HyperCard-stack challenger; user delegated the final pick.
+    THESIS: brief-pinned — Apple's own System Settings / App Store Connect register, replacing the prior switchboard identity per explicit user request. Operate mode: quiet neutral chrome over marketing pacing.
+    OWN-WORLD: near-white grounds, a fixed light sidebar (Apple Settings convention), grouped inset lists and hairline dividers, Inter, AllStay orange reserved for category/state emphasis only.
+    STORY: staff open the app to a persistent sidebar, scan the activity catalog as a clean tile grid, and manage reservations as a precise grouped list.
+    FIRST VIEWPORT: (per-page; see Activities.cshtml) sidebar + a light, hairline-divided content area — no dark panel, no marketing hero.
+    FORM: brief-pinned (apple-design skill), no direction roll — user explicitly requested this world over the prior switchboard direction.
     FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.
     -->
-    <header class="app-header">
-        <a class="brand" href="/">
-            <img src="~/img/logo.png" alt="AllStay" height="28" />
-            All<span class="text-brand">Stay</span> Backoffice
-        </a>
-
+    <div class="app-shell">
         @if (User.Identity?.IsAuthenticated == true)
         {
-            <nav class="app-nav">
-                <a href="/Activities">Atividades</a>
-                <a href="/Reservations">Reservas</a>
-                <span class="staff-name">@User.GetFullName() (@User.GetHotelName())</span>
-                <form method="post" asp-page="/Logout" style="display:inline;">
-                    <button type="submit" class="link-button">Sair</button>
-                </form>
-            </nav>
+            <aside class="app-sidebar">
+                <a class="brand" href="/">
+                    <img src="~/img/logo.png" alt="AllStay" height="24" />
+                    All<span class="text-brand">Stay</span>
+                </a>
+                <nav class="app-nav">
+                    <a href="/Activities">Atividades</a>
+                    <a href="/Reservations">Reservas</a>
+                </nav>
+                <div class="sidebar-footer">
+                    <span class="staff-name">@User.GetFullName()<br />@User.GetHotelName()</span>
+                    <form method="post" asp-page="/Logout" style="display:inline;">
+                        <button type="submit" class="link-button">Sair</button>
+                    </form>
+                </div>
+            </aside>
         }
-    </header>
 
-    <main class="app-main">
-        @RenderBody()
-    </main>
+        <main class="app-main @(User.Identity?.IsAuthenticated == true ? "" : "app-main-bare")">
+            @RenderBody()
+        </main>
+    </div>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -4,33 +4,38 @@
     ViewData["Title"] = "AllStay — Concierge digital para hotéis";
 }
 
-<section class="hero py-5">
-    <div class="container py-5">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-6">
-                <span class="hero-tagline">Concierge digital · Hotéis 4 e 5 estrelas</span>
-                <h1>Seu hóspede não deveria precisar ir até a recepção para aproveitar o hotel.</h1>
-                <p class="lead mt-3">
-                    AllStay centraliza spa, passeios, restaurantes e eventos do seu hotel em um app
-                    mobile-first — acessado por QR code, sem instalação e sem fricção.
-                </p>
-                <div class="d-flex flex-wrap gap-3 mt-4">
-                    <a href="#precos" class="btn btn-brand btn-lg">Ver planos</a>
-                    <a asp-page="/Contact" class="btn btn-outline-light btn-lg">Falar com vendas</a>
+<section class="hero">
+    <div class="container">
+        <span class="claim-eyebrow">Concierge digital para hotéis 4 e 5 estrelas</span>
+        <h1 class="claim-heading">O hóspede não devia precisar ir até a recepção.</h1>
+        <p class="claim-sub">
+            AllStay centraliza spa, passeios, restaurantes e eventos do hotel em um app mobile-first —
+            acessado por QR code, sem instalação.
+        </p>
+        <div class="hero-actions">
+            <a asp-page="/Contact" class="btn btn-brand btn-lg">Falar com vendas</a>
+            <a href="#precos" class="btn-text">Ver planos ›</a>
+        </div>
+        <div class="device-frame">
+            <div class="screen">
+                <div class="notch"></div>
+                <div class="mock-status"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                <div class="mock-title"><strong>Hotel Aurora</strong><span>O que você quer aproveitar hoje?</span></div>
+                <div class="mock-chips">
+                    <span class="mock-chip on">Tudo</span>
+                    <span class="mock-chip">Spa</span>
+                    <span class="mock-chip">Passeios</span>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="switchboard">
-                    <div class="switchboard-jacks" aria-hidden="true">
-                        @for (var i = 0; i < 20; i++)
-                        {
-                            <span class="jack @(i == 7 ? "is-lit" : "")"></span>
-                        }
+                <div class="mock-cards">
+                    <div class="mock-card lit">
+                        <span class="tag">Spa</span>
+                        <div class="t">Massagem relaxante</div>
+                        <div class="m"><span>60 min</span><span class="price">R$ 180</span></div>
                     </div>
-                    <div class="switchboard-route">
-                        <span class="route-tag">Quarto 214</span>
-                        <span class="route-cable" aria-hidden="true"></span>
-                        <span class="route-tag is-active">Spa · 11:30 reservado</span>
+                    <div class="mock-card">
+                        <span class="tag">Passeios</span>
+                        <div class="t">Passeio de escuna</div>
+                        <div class="m"><span>3h</span><span class="price">R$ 120</span></div>
                     </div>
                 </div>
             </div>
@@ -38,105 +43,107 @@
     </div>
 </section>
 
-<section id="produto" class="paper-section py-5 py-md-6">
+<section class="section">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-7">
-                <h2 class="section-head">Por que hotéis 4 e 5 estrelas escolhem o AllStay</h2>
-                <p class="section-sub mb-5">Três conexões que hoje passam pela recepção — e que o hóspede pode fazer sozinho.</p>
+        <span class="claim-eyebrow">Como funciona</span>
+        <h2 class="claim-heading">Da recepção para o bolso do hóspede.</h2>
+        <p class="claim-sub">Três passos, sem intermediário.</p>
+        <div class="proof-visual">
+            <div class="proof-steps">
+                <div class="proof-step">
+                    <div class="n">01</div>
+                    <div class="t">Escaneia o QR code do quarto</div>
+                </div>
+                <span class="proof-arrow">→</span>
+                <div class="proof-step">
+                    <div class="n">02</div>
+                    <div class="t">Escolhe horário e reserva</div>
+                </div>
+                <span class="proof-arrow">→</span>
+                <div class="proof-step">
+                    <div class="n">03</div>
+                    <div class="t">Cobrado na conta do quarto</div>
+                </div>
             </div>
         </div>
-        <div class="ledger">
-            <div class="ledger-row">
-                <div class="ledger-label">
-                    <span class="icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none"/></svg>
-                    </span>
-                    <div>
-                        <span class="ledger-code docket">Ramal 01</span>
-                        <h3>Catálogo centralizado</h3>
-                    </div>
-                </div>
-                <span class="ledger-arrow" aria-hidden="true">→</span>
+    </div>
+</section>
+
+<section id="produto" class="section section-alt">
+    <div class="container">
+        <span class="claim-eyebrow">Por que hotéis escolhem o AllStay</span>
+        <h2 class="claim-heading">Tudo o que a recepção fazia manualmente, automático.</h2>
+        <div class="tile-grid mt-5">
+            <div class="tile">
+                <h3>Catálogo centralizado</h3>
                 <p>Todas as atividades, horários, preços e vagas do hotel em um único lugar — sem folders, placas ou informação fragmentada.</p>
-            </div>
-            <div class="ledger-row">
-                <div class="ledger-label">
-                    <span class="icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
-                    </span>
-                    <div>
-                        <span class="ledger-code docket">Ramal 02</span>
-                        <h3>Reserva em tempo real</h3>
-                    </div>
+                <div class="tile-visual">
+                    <div class="stat">1<span class="accent">/1</span></div>
+                    <div class="cap">app para spa, passeios, restaurantes e eventos</div>
                 </div>
-                <span class="ledger-arrow" aria-hidden="true">→</span>
+            </div>
+            <div class="tile">
+                <h3>Reserva em tempo real</h3>
                 <p>O hóspede filtra por categoria, horário e preço, e reserva em segundos — sem depender da recepção ou do concierge.</p>
-            </div>
-            <div class="ledger-row">
-                <div class="ledger-label">
-                    <span class="icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-7M22 19v-3"/></svg>
-                    </span>
-                    <div>
-                        <span class="ledger-code docket">Ramal 03</span>
-                        <h3>Aumento de ticket médio</h3>
-                    </div>
+                <div class="tile-visual">
+                    <div class="stat">&lt;30<span class="accent">s</span></div>
+                    <div class="cap">do catálogo à reserva confirmada</div>
                 </div>
-                <span class="ledger-arrow" aria-hidden="true">→</span>
-                <p>Descoberta guiada de experiências pagas aumenta o consumo de serviços e a percepção de valor da estadia — refletindo em NPS.</p>
+            </div>
+            <div class="tile">
+                <h3>Aumento de ticket médio</h3>
+                <p>Descoberta guiada de experiências pagas aumenta o consumo de serviços e a percepção de valor da estadia.</p>
+                <div class="tile-visual">
+                    <div class="stat"><span class="accent">↑</span> NPS</div>
+                    <div class="cap">mais consumo, mais satisfação</div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="precos" class="panel-section py-5 py-md-6">
+<section id="precos" class="section dark-section">
     <div class="container">
-        <h2 class="section-head">Planos para cada porte de hotel</h2>
-        <p class="section-sub mb-5">Assinatura SaaS mensal por hotel. Sem taxas de implantação escondidas.</p>
-        <div class="row g-4 justify-content-center">
-            <div class="col-md-4">
-                <div class="plate h-100">
-                    <div class="plate-tier"><span class="jack"></span>Essential</div>
-                    <p class="plate-price">R$ 5.000<span class="per">/mês</span></p>
-                    <p class="plate-note">a partir de</p>
-                    <ul class="plate-list">
-                        <li>Catálogo de atividades e reservas</li>
-                        <li>Acesso via QR code / link</li>
-                        <li>Backoffice para gestão de vagas</li>
-                        <li>Suporte por e-mail</li>
-                    </ul>
-                    <a asp-page="/Contact" class="btn btn-outline-light w-100">Falar com vendas</a>
-                </div>
+        <span class="claim-eyebrow">Planos</span>
+        <h2 class="claim-heading">Um plano para cada porte de hotel.</h2>
+        <p class="claim-sub">Assinatura mensal por hotel. Sem taxas de implantação escondidas.</p>
+        <div class="price-grid mt-5">
+            <div class="price-card">
+                <div class="price-tier">Essential</div>
+                <p class="price-figure">R$ 5.000<span class="per">/mês</span></p>
+                <p class="price-note">a partir de</p>
+                <ul class="price-list">
+                    <li>Catálogo de atividades e reservas</li>
+                    <li>Acesso via QR code / link</li>
+                    <li>Backoffice para gestão de vagas</li>
+                    <li>Suporte por e-mail</li>
+                </ul>
+                <a asp-page="/Contact" class="btn btn-outline-light w-100">Falar com vendas</a>
             </div>
-            <div class="col-md-4">
-                <div class="plate is-featured h-100">
-                    <span class="plate-badge">Mais popular</span>
-                    <div class="plate-tier"><span class="jack is-lit"></span>Professional</div>
-                    <p class="plate-price">R$ 10.000<span class="per">/mês</span></p>
-                    <p class="plate-note">a partir de</p>
-                    <ul class="plate-list">
-                        <li>Tudo do Essential</li>
-                        <li>Analytics de uso e consumo</li>
-                        <li>Suporte prioritário e treinamento</li>
-                        <li>Recomendações personalizadas</li>
-                    </ul>
-                    <a asp-page="/Contact" class="btn btn-brand w-100">Falar com vendas</a>
-                </div>
+            <div class="price-card is-featured">
+                <span class="price-badge">Mais popular</span>
+                <div class="price-tier">Professional</div>
+                <p class="price-figure">R$ 10.000<span class="per">/mês</span></p>
+                <p class="price-note">a partir de</p>
+                <ul class="price-list">
+                    <li>Tudo do Essential</li>
+                    <li>Analytics de uso e consumo</li>
+                    <li>Suporte prioritário e treinamento</li>
+                    <li>Recomendações personalizadas</li>
+                </ul>
+                <a asp-page="/Contact" class="btn btn-outline-light w-100">Falar com vendas</a>
             </div>
-            <div class="col-md-4">
-                <div class="plate h-100">
-                    <div class="plate-tier"><span class="jack"></span>Enterprise</div>
-                    <p class="plate-price">R$ 15.000<span class="per">/mês</span></p>
-                    <p class="plate-note">a partir de</p>
-                    <ul class="plate-list">
-                        <li>Tudo do Professional</li>
-                        <li>Serviços especializados</li>
-                        <li>SLA dedicado</li>
-                        <li>Squad dedicada sob contrato (redes hoteleiras)</li>
-                    </ul>
-                    <a asp-page="/Contact" class="btn btn-outline-light w-100">Falar com vendas</a>
-                </div>
+            <div class="price-card">
+                <div class="price-tier">Enterprise</div>
+                <p class="price-figure">R$ 15.000<span class="per">/mês</span></p>
+                <p class="price-note">a partir de</p>
+                <ul class="price-list">
+                    <li>Tudo do Professional</li>
+                    <li>Serviços especializados</li>
+                    <li>SLA dedicado</li>
+                    <li>Squad dedicada sob contrato (redes hoteleiras)</li>
+                </ul>
+                <a asp-page="/Contact" class="btn btn-outline-light w-100">Falar com vendas</a>
             </div>
         </div>
     </div>

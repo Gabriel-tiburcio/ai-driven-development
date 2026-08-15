@@ -4,13 +4,13 @@
     ViewData["Title"] = "Fale com vendas";
 }
 
-<section class="paper-section py-5 py-md-6">
-    <div class="container" style="max-width: 640px;">
-        <div class="mb-5">
-            <span class="hero-tagline" style="color: var(--brass-700);">Solicitação de conexão</span>
-            <h1 class="section-head">Fale com o time comercial</h1>
-            <p class="section-sub">
-                Conte um pouco sobre o seu hotel. Nosso time entra em contato para um diagnóstico
+<section class="section" style="text-align:left; padding-top: clamp(6rem, 10vw, 8rem);">
+    <div class="container" style="max-width: 560px;">
+        <div class="mb-5" style="text-align:center;">
+            <span class="claim-eyebrow">Fale com vendas</span>
+            <h1 class="claim-heading" style="font-size: clamp(2rem, 4vw, 2.75rem);">Vamos conversar sobre o seu hotel.</h1>
+            <p class="claim-sub">
+                Conte um pouco sobre a propriedade. Nosso time entra em contato para um diagnóstico
                 e apresentação personalizada da plataforma.
             </p>
         </div>
@@ -28,7 +28,7 @@
                 <div class="alert alert-danger" role="alert">@Model.ErrorMessage</div>
             }
 
-            <form method="post" class="slip p-4 p-md-5">
+            <form method="post" class="card p-4 p-md-5">
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                 <div class="mb-3">

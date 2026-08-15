@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "app-guest/src/index.css"
+        ],
+        "createdAt": "2026-08-15T22:05:25.875Z",
+        "reason": "user pinned apple-design skill (apple.com visual language); Inter is that skill's own documented SF-Pro substitute for web use, not a default"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "web-institutional/wwwroot/css/site.css"
+        ],
+        "createdAt": "2026-08-15T22:05:32.764Z",
+        "reason": "user pinned apple-design skill (apple.com visual language); Inter is that skill's own documented SF-Pro substitute for web use, not a default"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "web-hotel-portal/wwwroot/css/site.css"
+        ],
+        "createdAt": "2026-08-15T22:05:32.840Z",
+        "reason": "user pinned apple-design skill (apple.com visual language); Inter is that skill's own documented SF-Pro substitute for web use, not a default"
+      }
+    ]
+  }
+}
