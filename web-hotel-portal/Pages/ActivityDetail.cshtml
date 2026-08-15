@@ -1,0 +1,58 @@
+@page "{id:guid}"
+@model ActivityDetailModel
+@{
+    ViewData["Title"] = Model.Activity?.Name ?? "Atividade";
+    Layout = "_Layout";
+}
+
+<a asp-page="/Activities" class="back-link">&larr; Voltar para atividades</a>
+<h1>@Model.Activity!.Name</h1>
+<p>@Model.Activity.Description</p>
+
+<div class="card">
+    <h3>Novo horário</h3>
+    <p class="empty-note" style="margin-bottom:1rem;">Adicione um horário para abrir vagas de reserva.</p>
+    <form method="post" asp-page-handler="AddSlot">
+        <div class="field">
+            <label asp-for="Input.Date">Data</label>
+            <input asp-for="Input.Date" type="date" />
+        </div>
+        <div class="field">
+            <label asp-for="Input.Time">Hora</label>
+            <input asp-for="Input.Time" type="time" />
+        </div>
+        <div class="field">
+            <label asp-for="Input.Capacity">Capacidade</label>
+            <input asp-for="Input.Capacity" type="number" />
+        </div>
+        <button type="submit">Adicionar horário</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Data/Hora</th>
+            <th>Capacidade</th>
+            <th>Reservados</th>
+            <th>Disponíveis</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var slot in Model.Activity.Slots.OrderBy(s => s.StartTime))
+        {
+            <tr>
+                <td>@slot.StartTime.LocalDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@slot.Capacity</td>
+                <td>@slot.BookedCount</td>
+                <td>@slot.AvailableSpots</td>
+                <td>
+                    <form method="post" asp-page-handler="DeleteSlot" asp-route-slotId="@slot.Id" style="display:inline;">
+                        <button type="submit" class="danger">Remover</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

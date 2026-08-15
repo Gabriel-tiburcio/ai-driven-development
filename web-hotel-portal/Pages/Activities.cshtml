@@ -1,0 +1,62 @@
+@page
+@model ActivitiesModel
+@{
+    ViewData["Title"] = "Atividades";
+    Layout = "_Layout";
+}
+
+<h1>Atividades</h1>
+
+<div class="card">
+    <details>
+        <summary>Nova atividade</summary>
+        <form method="post" style="margin-top:1rem;">
+            <div class="field">
+                <label asp-for="Input.Name">Nome</label>
+                <input asp-for="Input.Name" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Category">Categoria</label>
+                <input asp-for="Input.Category" placeholder="Spa, Passeios, Gastronomia..." required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Description">Descrição</label>
+                <textarea asp-for="Input.Description"></textarea>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Price">Preço (R$)</label>
+                <input asp-for="Input.Price" type="number" step="0.01" />
+            </div>
+            <div class="field">
+                <label asp-for="Input.DurationMinutes">Duração (minutos)</label>
+                <input asp-for="Input.DurationMinutes" type="number" />
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+    </details>
+</div>
+
+@if (Model.Activities.Count == 0)
+{
+    <p class="empty-note">Nenhuma atividade cadastrada ainda.</p>
+}
+else
+{
+    <div class="docket-wall">
+        @foreach (var activity in Model.Activities)
+        {
+            <div class="docket-card">
+                <span class="docket-card-category">@activity.Category</span>
+                <h3>@activity.Name</h3>
+                <div class="docket-card-meta">
+                    <span><strong>@(activity.Price == 0 ? "Incluso" : activity.Price.ToString("C"))</strong></span>
+                    <span>@activity.DurationMinutes min</span>
+                </div>
+                <div class="docket-card-slots">
+                    <strong>@activity.Slots.Sum(s => s.AvailableSpots)</strong> vagas futuras
+                </div>
+                <a asp-page="/ActivityDetail" asp-route-id="@activity.Id" class="btn secondary">Abrir docket &rarr;</a>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,11 @@
+@page "/"
+@rendermode InteractiveServer
+@inject AuthState AuthState
+@inject NavigationManager Nav
+
+@code {
+    protected override void OnInitialized()
+    {
+        Nav.NavigateTo(AuthState.IsAuthenticated ? "/activities" : "/login", replace: true);
+    }
+}

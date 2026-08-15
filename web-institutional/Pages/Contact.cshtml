@@ -1,0 +1,70 @@
+@page
+@model ContactModel
+@{
+    ViewData["Title"] = "Fale com vendas";
+}
+
+<section class="paper-section py-5 py-md-6">
+    <div class="container" style="max-width: 640px;">
+        <div class="mb-5">
+            <span class="hero-tagline" style="color: var(--brass-700);">Solicitação de conexão</span>
+            <h1 class="section-head">Fale com o time comercial</h1>
+            <p class="section-sub">
+                Conte um pouco sobre o seu hotel. Nosso time entra em contato para um diagnóstico
+                e apresentação personalizada da plataforma.
+            </p>
+        </div>
+
+        @if (Model.Submitted)
+        {
+            <div class="alert alert-success" role="alert">
+                Recebemos sua mensagem! Nosso time comercial vai entrar em contato em breve.
+            </div>
+        }
+        else
+        {
+            @if (Model.ErrorMessage is not null)
+            {
+                <div class="alert alert-danger" role="alert">@Model.ErrorMessage</div>
+            }
+
+            <form method="post" class="slip p-4 p-md-5">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.HotelName" class="form-label"></label>
+                    <input asp-for="Input.HotelName" class="form-control" />
+                    <span asp-validation-for="Input.HotelName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.ContactName" class="form-label"></label>
+                    <input asp-for="Input.ContactName" class="form-control" />
+                    <span asp-validation-for="Input.ContactName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <input asp-for="Input.Email" class="form-control" type="email" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Phone" class="form-label"></label>
+                    <input asp-for="Input.Phone" class="form-control" />
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Input.Message" class="form-label"></label>
+                    <textarea asp-for="Input.Message" class="form-control" rows="4"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-brand w-100">Enviar</button>
+            </form>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,564 @@
+/* ============================================================
+   AllStay — Institutional (B2B) design system
+   World: THE HOTEL SWITCHBOARD — the grand-hotel PBX operator's
+   board, reborn as software. Brass jacks, patch cables, docket
+   slips, engraved plates. AllStay is the switchboard that used
+   to need a human operator; it routes guests to services itself.
+   ============================================================ */
+
+:root {
+  /* Panel — walnut/bakelite ground, the dominant dark material */
+  --panel-950: #120d09;
+  --panel-900: #1a130d;
+  --panel-800: #241a11;
+  --panel-700: #332417;
+  --panel-line: rgba(217, 184, 119, 0.16);
+
+  /* Brass — hardware, rules, secondary ink on dark */
+  --brass-200: #ecd9ab;
+  --brass-300: #d9b877;
+  --brass-500: #b8923f;
+  --brass-700: #8a6a2c;
+
+  /* Active — the lit jack. AllStay's orange, reserved for the live connection. */
+  --active-400: #ff9e56;
+  --active-500: #f2874a;
+  --active-600: #d96a2c;
+  --active-glow: rgba(242, 135, 74, 0.55);
+
+  /* Paper — docket/ledger ground for dense reading sections */
+  --paper-50: #f7f1e4;
+  --paper-100: #efe4cd;
+  --paper-line: rgba(30, 20, 10, 0.12);
+
+  /* Ink on paper */
+  --ink-950: #1c130a;
+  --ink-700: #4a3a26;
+  --ink-500: #7a6549;
+
+  /* Ink on panel */
+  --panel-fg: #efe6d6;
+  --panel-fg-dim: #b8a98c;
+
+  --radius-sm: 0.35rem;
+  --radius-md: 0.6rem;
+
+  --shadow-sm: 0 1px 2px rgba(18, 13, 9, 0.35);
+  --shadow-md: 0 12px 28px -10px rgba(18, 13, 9, 0.55);
+  --shadow-lg: 0 28px 56px -18px rgba(18, 13, 9, 0.6);
+
+  --font-display: "Oswald", "Arial Narrow", sans-serif;
+  --font-body: "Spectral", Georgia, serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+}
+
+.py-6 { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+@media (min-width: 768px) { .py-md-6 { padding-top: 6.5rem !important; padding-bottom: 6.5rem !important; } }
+
+html { font-size: 15px; }
+@media (min-width: 768px) { html { font-size: 16.5px; } }
+html { position: relative; min-height: 100%; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink-950);
+  background: var(--paper-50);
+  -webkit-font-smoothing: antialiased;
+  margin-bottom: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: inherit;
+}
+
+p { color: var(--ink-700); line-height: 1.7; }
+.container { max-width: 1180px; }
+
+::selection { background: var(--active-500); color: var(--panel-950); }
+
+a { color: var(--active-600); }
+a:hover { color: var(--active-500); }
+
+:focus-visible {
+  outline: 2px solid var(--active-500);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ==== Docket / mono labels ==== */
+.docket {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ==== Navbar — brass strip on the panel ==== */
+.navbar {
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+  background: var(--panel-950) !important;
+  border-bottom: 1px solid var(--panel-line) !important;
+}
+.navbar-brand {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--panel-fg) !important;
+}
+.navbar-brand img { filter: drop-shadow(0 0 6px var(--active-glow)); }
+.navbar-brand .accent { color: var(--active-500); }
+
+.navbar-toggler {
+  border-color: var(--panel-line);
+  color: var(--panel-fg);
+}
+.navbar-toggler-icon {
+  filter: invert(1) sepia(1) saturate(0) brightness(1.6);
+}
+
+.nav-link {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--panel-fg-dim) !important;
+  position: relative;
+  padding-left: 1rem !important;
+  transition: color 0.15s ease;
+}
+.nav-link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brass-700);
+  transform: translateY(-50%);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.nav-link:hover { color: var(--panel-fg) !important; }
+.nav-link:hover::before {
+  background: var(--active-500);
+  box-shadow: 0 0 6px 1px var(--active-glow);
+}
+
+/* ==== Buttons — engraved toggles ==== */
+.btn {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1.4rem;
+  border-width: 1.5px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+.btn-lg { padding: 0.85rem 1.85rem; }
+.btn-sm { padding: 0.45rem 1rem; font-size: 0.72rem; }
+
+.btn-brand {
+  background: var(--active-500);
+  border-color: var(--active-600);
+  color: var(--panel-950);
+  box-shadow: 0 0 0 1px var(--active-600) inset, var(--shadow-sm);
+}
+.btn-brand:hover {
+  background: var(--active-400);
+  border-color: var(--active-500);
+  color: var(--panel-950);
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px var(--active-500) inset, 0 0 18px 1px var(--active-glow), var(--shadow-md);
+}
+.btn-brand:focus-visible { box-shadow: 0 0 0 3px var(--active-glow); }
+
+.btn-outline-light {
+  border-color: var(--brass-500);
+  color: var(--panel-fg);
+  background: transparent;
+}
+.btn-outline-light:hover {
+  background: rgba(217, 184, 119, 0.1);
+  border-color: var(--brass-300);
+  color: var(--brass-200);
+}
+
+.btn-outline-primary {
+  color: var(--ink-950);
+  border-color: var(--brass-500);
+  background: transparent;
+}
+.btn-outline-primary:hover {
+  background: var(--paper-100);
+  border-color: var(--brass-700);
+  color: var(--ink-950);
+}
+
+.btn:focus:not(:focus-visible) { box-shadow: none; }
+
+/* ==== Hero — the switchboard itself ==== */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--panel-950);
+  color: var(--panel-fg);
+  border-bottom: 1px solid var(--panel-line);
+}
+.hero .container { position: relative; z-index: 1; }
+
+.hero-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-300);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.hero h1 {
+  color: var(--panel-fg);
+  font-size: clamp(2.1rem, 4.4vw, 3.35rem);
+  text-transform: none;
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: 0;
+  max-width: 18ch;
+}
+
+.hero .lead {
+  color: var(--panel-fg-dim);
+  font-size: 1.12rem;
+  max-width: 46ch;
+  font-family: var(--font-body);
+}
+
+/* ==== Switchboard panel graphic ==== */
+.switchboard {
+  background: linear-gradient(180deg, var(--panel-800), var(--panel-900));
+  border: 1px solid var(--panel-line);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1.5rem 1.25rem;
+  box-shadow: inset 0 1px 0 rgba(236, 217, 171, 0.06), var(--shadow-lg);
+}
+.switchboard-jacks {
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.jack {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--panel-950);
+  border: 1.5px solid var(--brass-700);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  flex: 0 0 auto;
+}
+.jack.is-lit {
+  border-color: var(--active-500);
+  background: var(--active-500);
+  box-shadow: 0 0 8px 2px var(--active-glow), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.switchboard-route {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+.route-tag {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--panel-fg);
+  border: 1px solid var(--brass-500);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.7rem;
+  background: var(--panel-900);
+  white-space: nowrap;
+}
+.route-tag.is-active {
+  border-color: var(--active-500);
+  color: var(--active-400);
+  box-shadow: 0 0 10px -2px var(--active-glow);
+}
+.route-cable {
+  flex: 1 1 40px;
+  min-width: 24px;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--active-500) 0 6px, transparent 6px 11px);
+  position: relative;
+}
+.route-cable::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--active-500);
+  transform: translateY(-50%);
+  box-shadow: 0 0 6px 1px var(--active-glow);
+}
+
+/* ==== Section rhythm ==== */
+.panel-section {
+  background: var(--panel-950);
+  color: var(--panel-fg);
+}
+.paper-section {
+  background: var(--paper-50);
+}
+.section-head {
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  margin-bottom: 0.6rem;
+}
+.section-sub {
+  font-family: var(--font-body);
+  text-transform: none;
+  color: var(--ink-500);
+  max-width: 56ch;
+}
+.panel-section .section-sub { color: var(--panel-fg-dim); }
+
+/* ==== Routing ledger (product/feature rows) ==== */
+.ledger {
+  border-top: 1px solid var(--paper-line);
+}
+.ledger-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.6fr);
+  gap: 1.25rem;
+  align-items: center;
+  padding: 1.6rem 0;
+  border-bottom: 1px solid var(--paper-line);
+}
+.ledger-row .icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  color: var(--active-600);
+}
+.ledger-row .icon svg { width: 100%; height: 100%; }
+.ledger-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.ledger-label h3 {
+  font-size: 1.05rem;
+  text-transform: none;
+  margin: 0;
+  color: var(--ink-950);
+}
+.ledger-code {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--brass-700);
+}
+.ledger-arrow {
+  font-family: var(--font-mono);
+  color: var(--active-600);
+  font-size: 1.1rem;
+  justify-self: center;
+}
+.ledger-row p { margin: 0; }
+
+@media (max-width: 767px) {
+  .ledger-row { grid-template-columns: 1fr; gap: 0.6rem; }
+  .ledger-arrow { display: none; }
+}
+
+/* ==== Pricing — switchboard drawer plates ==== */
+.plate {
+  background: var(--panel-800);
+  border: 1px solid var(--panel-line);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.75rem;
+  height: 100%;
+  color: var(--panel-fg);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  position: relative;
+}
+.plate:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+.plate.is-featured {
+  border-color: var(--active-500);
+  box-shadow: 0 0 0 1px var(--active-500), var(--shadow-lg);
+  transform: translateY(-6px);
+}
+.plate.is-featured:hover { transform: translateY(-9px); }
+
+.plate-tier {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--brass-300);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.plate-tier .jack { width: 10px; height: 10px; }
+
+.plate-price {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--panel-fg);
+  margin-bottom: 0;
+  line-height: 1.1;
+}
+.plate-price .per {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--panel-fg-dim);
+}
+.plate-note {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--panel-fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.plate-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.75rem;
+  border-top: 1px solid var(--panel-line);
+}
+.plate-list li {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--panel-line);
+  color: var(--panel-fg-dim);
+  font-size: 0.92rem;
+  display: flex;
+  gap: 0.6rem;
+}
+.plate-list li::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  margin-top: 0.45rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--brass-500);
+}
+.plate.is-featured .plate-list li::before {
+  border-color: var(--active-500);
+  background: var(--active-500);
+  box-shadow: 0 0 5px 1px var(--active-glow);
+}
+
+.plate-badge {
+  position: absolute;
+  top: -0.8rem;
+  right: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--panel-950);
+  background: var(--active-500);
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==== Cards (contact + generic) ==== */
+.card {
+  background: var(--paper-50);
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==== Forms — the connection-request slip ==== */
+.slip {
+  background: var(--paper-100);
+  border: 1px solid var(--brass-500);
+  border-radius: var(--radius-md);
+  position: relative;
+}
+.slip::before {
+  content: "";
+  position: absolute;
+  inset: 0.5rem;
+  border: 1px dashed var(--paper-line);
+  border-radius: calc(var(--radius-md) - 0.15rem);
+  pointer-events: none;
+}
+
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-700);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+.form-control, textarea.form-control {
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--paper-line);
+  background: var(--paper-50);
+  color: var(--ink-950);
+  padding: 0.65rem 0.85rem;
+  font-family: var(--font-body);
+}
+.form-control:focus {
+  border-color: var(--active-600);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(217, 106, 44, 0.15);
+}
+.form-control::placeholder { color: var(--ink-500); opacity: 0.7; }
+
+.alert {
+  border-radius: var(--radius-sm);
+  border: 1px solid;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.alert-success {
+  background: rgba(60, 120, 70, 0.1);
+  border-color: rgba(60, 120, 70, 0.4);
+  color: #2b5c36;
+}
+.alert-danger {
+  background: rgba(180, 60, 40, 0.08);
+  border-color: rgba(180, 60, 40, 0.35);
+  color: #8a3220;
+}
+.text-danger { color: #a3402b !important; font-family: var(--font-mono); font-size: 0.78rem; }
+
+/* ==== Footer ==== */
+footer {
+  background: var(--panel-950);
+  border-top: 1px solid var(--panel-line) !important;
+  padding: 2rem 0;
+}
+footer span, footer a {
+  color: var(--panel-fg-dim) !important;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+}
+footer a:hover { color: var(--active-400) !important; }

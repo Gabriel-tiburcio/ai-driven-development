@@ -1,0 +1,65 @@
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    background: #0f5fae;
+    color: #fff;
+}
+
+.brand {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.text-brand {
+    color: #cfe3f7;
+}
+
+.app-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.app-nav a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.app-nav a:hover {
+    text-decoration: underline;
+}
+
+.staff-name {
+    opacity: 0.85;
+    font-size: 0.9rem;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: #fff;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+.app-main {
+    flex: 1;
+    padding: 1.5rem;
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+}

@@ -1,0 +1,137 @@
+@page "/activities"
+@rendermode InteractiveServer
+@inject ApiClient Api
+@inject AuthState AuthState
+@inject NavigationManager Nav
+
+<h1>Atividades</h1>
+
+@if (!AuthState.IsAuthenticated)
+{
+    <p>Redirecionando para login...</p>
+}
+else
+{
+    <div class="card">
+        <button @onclick="ToggleCreateForm">@(showCreateForm ? "Cancelar" : "+ Nova atividade")</button>
+
+        @if (showCreateForm)
+        {
+            <EditForm Model="createModel" OnValidSubmit="HandleCreate" class="field" style="margin-top:1rem;">
+                <div class="field">
+                    <label>Nome</label>
+                    <InputText @bind-Value="createModel.Name" />
+                </div>
+                <div class="field">
+                    <label>Categoria</label>
+                    <InputText @bind-Value="createModel.Category" placeholder="Spa, Passeios, Gastronomia..." />
+                </div>
+                <div class="field">
+                    <label>Descrição</label>
+                    <InputTextArea @bind-Value="createModel.Description" />
+                </div>
+                <div class="field">
+                    <label>Preço (R$)</label>
+                    <InputNumber @bind-Value="createModel.Price" />
+                </div>
+                <div class="field">
+                    <label>Duração (minutos)</label>
+                    <InputNumber @bind-Value="createModel.DurationMinutes" />
+                </div>
+                <button type="submit">Salvar</button>
+            </EditForm>
+        }
+    </div>
+
+    @if (loading)
+    {
+        <p>Carregando...</p>
+    }
+    else if (activities.Count == 0)
+    {
+        <p>Nenhuma atividade cadastrada ainda.</p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Duração</th>
+                    <th>Vagas futuras</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var activity in activities)
+                {
+                    <tr>
+                        <td>@activity.Name</td>
+                        <td><span class="badge">@activity.Category</span></td>
+                        <td>@(activity.Price == 0 ? "Incluso" : activity.Price.ToString("C"))</td>
+                        <td>@activity.DurationMinutes min</td>
+                        <td>@activity.Slots.Sum(s => s.AvailableSpots)</td>
+                        <td><a href="/activities/@activity.Id">Gerenciar horários</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    private List<ActivityDto> activities = [];
+    private bool loading = true;
+    private bool showCreateForm;
+    private CreateActivityModel createModel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!AuthState.IsAuthenticated)
+        {
+            Nav.NavigateTo("/login", replace: true);
+            return;
+        }
+
+        await LoadActivities();
+    }
+
+    private async Task LoadActivities()
+    {
+        loading = true;
+        activities = await Api.GetActivitiesAsync(AuthState.Staff!.HotelId);
+        loading = false;
+    }
+
+    private void ToggleCreateForm() => showCreateForm = !showCreateForm;
+
+    private async Task HandleCreate()
+    {
+        var request = new CreateActivityRequest(
+            createModel.Name,
+            string.IsNullOrWhiteSpace(createModel.Description) ? null : createModel.Description,
+            createModel.Category,
+            createModel.Price,
+            createModel.DurationMinutes,
+            null);
+
+        var created = await Api.CreateActivityAsync(AuthState.Staff!.HotelId, request);
+        if (created is not null)
+        {
+            createModel = new CreateActivityModel();
+            showCreateForm = false;
+            await LoadActivities();
+        }
+    }
+
+    public class CreateActivityModel
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public decimal Price { get; set; }
+        public int DurationMinutes { get; set; } = 60;
+    }
+}

@@ -1,0 +1,41 @@
+@page
+@model ReservationsModel
+@{
+    ViewData["Title"] = "Reservas";
+    Layout = "_Layout";
+}
+
+<h1>Reservas</h1>
+
+@if (Model.Reservations.Count == 0)
+{
+    <p>Nenhuma reserva ainda.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Atividade</th>
+                <th>Horário</th>
+                <th>Hóspede</th>
+                <th>Quarto</th>
+                <th>Status</th>
+                <th>Criada em</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Reservations)
+            {
+                <tr>
+                    <td>@r.ActivityName</td>
+                    <td>@r.SlotStartTime.LocalDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@r.GuestName</td>
+                    <td>@r.RoomNumber</td>
+                    <td><span class="badge badge-status-@((int)r.Status)">@r.Status</span></td>
+                    <td>@r.CreatedAt.LocalDateTime.ToString("dd/MM HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

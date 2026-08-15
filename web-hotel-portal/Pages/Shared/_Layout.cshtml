@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AllStay Backoffice</title>
+    <link rel="icon" type="image/png" href="~/img/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- impeccable:direction
+    THESIS: web-hotel-portal inherits the institutional site's Hotel Switchboard world; this surface adapts it from Persuade to Operate — a staff console, not a pitch.
+    OWN-WORLD: same dark walnut/bakelite panel + brass + reserved orange system, on cream docket-paper for dense work areas; Oswald/Spectral/JetBrains Mono unchanged.
+    STORY: staff scan the activity catalog as pinned docket cards, open one to manage its time slots, and read reservations as a ruled ledger.
+    FIRST VIEWPORT: (per-page; see Activities.cshtml) a docket-card wall on the paper ground, not a table-of-icons scaffold.
+    FORM: Docket Card Wall, dealt index 7 of a surface-scope roll (seed key 0d92a621), raised with a "card edits toward its detail in place" discipline from a competitive HyperCard-stack challenger; user delegated the final pick.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.
+    -->
+    <header class="app-header">
+        <a class="brand" href="/">
+            <img src="~/img/logo.png" alt="AllStay" height="28" />
+            All<span class="text-brand">Stay</span> Backoffice
+        </a>
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <nav class="app-nav">
+                <a href="/Activities">Atividades</a>
+                <a href="/Reservations">Reservas</a>
+                <span class="staff-name">@User.GetFullName() (@User.GetHotelName())</span>
+                <form method="post" asp-page="/Logout" style="display:inline;">
+                    <button type="submit" class="link-button">Sair</button>
+                </form>
+            </nav>
+        }
+    </header>
+
+    <main class="app-main">
+        @RenderBody()
+    </main>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

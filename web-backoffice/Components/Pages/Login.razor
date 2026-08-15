@@ -1,0 +1,70 @@
+@page "/login"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components
+@inject ApiClient Api
+@inject AuthState AuthState
+@inject NavigationManager Nav
+
+<div class="card" style="max-width: 420px; margin: 3rem auto;">
+    <h1>Entrar</h1>
+    <p>Acesso da equipe do hotel ao AllStay Backoffice.</p>
+
+    @if (errorMessage is not null)
+    {
+        <div class="alert-error">@errorMessage</div>
+    }
+
+    <EditForm Model="model" OnValidSubmit="HandleLogin">
+        <div class="field">
+            <label>E-mail</label>
+            <InputText @bind-Value="model.Email" type="email" />
+        </div>
+        <div class="field">
+            <label>Senha</label>
+            <InputText @bind-Value="model.Password" type="password" />
+        </div>
+        <button type="submit" disabled="@isSubmitting">@(isSubmitting ? "Entrando..." : "Entrar")</button>
+    </EditForm>
+</div>
+
+@code {
+    private readonly LoginModel model = new();
+    private string? errorMessage;
+    private bool isSubmitting;
+
+    private async Task HandleLogin()
+    {
+        isSubmitting = true;
+        errorMessage = null;
+
+        try
+        {
+            var result = await Api.LoginAsync(model.Email, model.Password);
+            if (result is null)
+            {
+                errorMessage = "E-mail ou senha inválidos.";
+                isSubmitting = false;
+                return;
+            }
+
+            AuthState.SetSession(result);
+            Nav.NavigateTo("/activities", replace: true);
+        }
+        catch (NavigationException)
+        {
+            // Blazor's own redirect mechanism — must propagate, never swallow.
+            throw;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Não foi possível conectar à API: {ex.Message}";
+            isSubmitting = false;
+        }
+    }
+
+    public class LoginModel
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}
