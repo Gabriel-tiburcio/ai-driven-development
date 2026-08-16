@@ -1,0 +1,807 @@
+<meta charset="utf-8">
+<title>Guia de Uso AllStay</title>
+<style>
+  @font-face {
+    font-family: "UI Mono Fallback";
+    src: local("SFMono-Regular");
+  }
+
+  :root {
+    --bg: #f5f3ee;
+    --surface: #ffffff;
+    --surface-sunk: #efeade;
+    --text: #1c1e22;
+    --text-muted: #666a63;
+    --border: #e2ded0;
+    --accent: #d9701f;
+    --accent-ink: #ffffff;
+    --accent-2: #2c4a9c;
+    --tag-guest-bg: #fbe7d4;
+    --tag-guest-fg: #9a4c0f;
+    --tag-inst-bg: #dfe6f7;
+    --tag-inst-fg: #2c4a9c;
+    --tag-hotel-bg: #e3e9dc;
+    --tag-hotel-fg: #45633a;
+    --shadow: 0 1px 2px rgba(28, 30, 34, 0.04), 0 8px 24px -12px rgba(28, 30, 34, 0.18);
+    --chrome-bg: #e4e1d6;
+    --chrome-dot-1: #e0645a;
+    --chrome-dot-2: #e0b354;
+    --chrome-dot-3: #6ea866;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161a;
+      --surface: #1b1e23;
+      --surface-sunk: #21252b;
+      --text: #ecebe6;
+      --text-muted: #9a9d97;
+      --border: #2c3038;
+      --accent: #f0894a;
+      --accent-ink: #14161a;
+      --accent-2: #7c9aec;
+      --tag-guest-bg: #3a2917;
+      --tag-guest-fg: #f0b27e;
+      --tag-inst-bg: #1e2740;
+      --tag-inst-fg: #9db3ee;
+      --tag-hotel-bg: #232c1f;
+      --tag-hotel-fg: #a9c99c;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -16px rgba(0, 0, 0, 0.6);
+      --chrome-bg: #2a2e35;
+      --chrome-dot-1: #e0645a;
+      --chrome-dot-2: #e0b354;
+      --chrome-dot-3: #6ea866;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #14161a;
+    --surface: #1b1e23;
+    --surface-sunk: #21252b;
+    --text: #ecebe6;
+    --text-muted: #9a9d97;
+    --border: #2c3038;
+    --accent: #f0894a;
+    --accent-ink: #14161a;
+    --accent-2: #7c9aec;
+    --tag-guest-bg: #3a2917;
+    --tag-guest-fg: #f0b27e;
+    --tag-inst-bg: #1e2740;
+    --tag-inst-fg: #9db3ee;
+    --tag-hotel-bg: #232c1f;
+    --tag-hotel-fg: #a9c99c;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -16px rgba(0, 0, 0, 0.6);
+    --chrome-bg: #2a2e35;
+    --chrome-dot-1: #e0645a;
+    --chrome-dot-2: #e0b354;
+    --chrome-dot-3: #6ea866;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    min-height: 100vh;
+  }
+
+  a { color: var(--accent-2); }
+
+  .mono {
+    font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, Menlo, monospace;
+  }
+
+  /* ---------- Sidebar ---------- */
+
+  nav.sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    padding: 28px 20px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: linear-gradient(155deg, var(--accent), #f2a35f);
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    flex: none;
+  }
+
+  .brand-name {
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-sub {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  .nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .nav-group-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 10px 8px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13.5px;
+    line-height: 1.3;
+  }
+
+  .nav-link:hover { background: var(--surface-sunk); }
+
+  .nav-link .n {
+    font-family: ui-monospace, Consolas, Menlo, monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    flex: none;
+    width: 14px;
+  }
+
+  .sidebar-foot {
+    margin-top: auto;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  /* ---------- Main ---------- */
+
+  main {
+    padding: 56px 48px 120px;
+    max-width: 900px;
+  }
+
+  header.hero {
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-size: 40px;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+    text-wrap: balance;
+    font-weight: 750;
+  }
+
+  .lede {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    max-width: 62ch;
+    margin: 0 0 28px;
+  }
+
+  .flow-index {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .flow-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    background: var(--surface);
+    text-decoration: none;
+    color: var(--text);
+    box-shadow: var(--shadow);
+  }
+
+  .flow-card .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+
+  .tag-guest { background: var(--tag-guest-bg); color: var(--tag-guest-fg); }
+  .tag-inst { background: var(--tag-inst-bg); color: var(--tag-inst-fg); }
+  .tag-hotel { background: var(--tag-hotel-bg); color: var(--tag-hotel-fg); }
+
+  .flow-card h3 {
+    font-size: 15px;
+    margin: 0 0 4px;
+  }
+
+  .flow-card p {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  section.flow {
+    margin-top: 88px;
+    scroll-margin-top: 32px;
+  }
+
+  .flow-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .flow-head .tag {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+
+  .flow-head h2 {
+    font-size: 27px;
+    letter-spacing: -0.015em;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .flow-url {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0 0 36px;
+  }
+
+  ol.steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 52px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 20px;
+  }
+
+  .step-num {
+    font-family: ui-monospace, Consolas, Menlo, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--surface-sunk);
+    border: 1px solid var(--border);
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+  }
+
+  .step-body h3 {
+    font-size: 18px;
+    margin: 3px 0 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .step-body p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0 0 18px;
+    max-width: 62ch;
+  }
+
+  .step-body p strong { color: var(--text); font-weight: 600; }
+
+  .browser-frame {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background: var(--surface);
+  }
+
+  .browser-chrome {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    background: var(--chrome-bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .browser-dots { display: flex; gap: 5px; flex: none; }
+  .browser-dots span {
+    width: 9px; height: 9px; border-radius: 50%;
+  }
+  .browser-dots span:nth-child(1) { background: var(--chrome-dot-1); }
+  .browser-dots span:nth-child(2) { background: var(--chrome-dot-2); }
+  .browser-dots span:nth-child(3) { background: var(--chrome-dot-3); }
+
+  .browser-url {
+    font-family: ui-monospace, Consolas, Menlo, monospace;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .browser-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1440 / 723;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .note {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--surface-sunk);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 10px 13px;
+    line-height: 1.5;
+  }
+
+  .note strong { color: var(--text); }
+
+  footer.doc-foot {
+    margin-top: 96px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 860px) {
+    body { grid-template-columns: 1fr; }
+    nav.sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    main { padding: 32px 20px 80px; }
+    .flow-index { grid-template-columns: 1fr; }
+    .step { grid-template-columns: 34px 1fr; }
+    h1 { font-size: 30px; }
+  }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { display: block; background: var(--bg); }
+    nav.sidebar { display: none; }
+    main { max-width: 100%; padding: 0 28px 40px; }
+    header.hero { padding-top: 28px; }
+    .flow-card { box-shadow: none; }
+    section.flow { margin-top: 48px; break-before: page; }
+    section.flow:first-of-type { break-before: auto; }
+    .step { break-inside: avoid; }
+    .browser-frame { box-shadow: none; break-inside: avoid; }
+    footer.doc-foot { break-before: page; }
+  }
+</style>
+
+<nav class="sidebar">
+  <div class="brand">
+    <div class="brand-mark">☀️</div>
+    <div>
+      <div class="brand-name">AllStay</div>
+      <div class="brand-sub">Guia de uso</div>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label"><span class="tag tag-guest" style="padding:2px 7px;">App do Hóspede</span></div>
+    <a class="nav-link" href="#hospede"><span class="n">01</span> Entrada pelo código</a>
+    <a class="nav-link" href="#hospede-2"><span class="n">02</span> Código do hotel</a>
+    <a class="nav-link" href="#hospede-3"><span class="n">03</span> Catálogo</a>
+    <a class="nav-link" href="#hospede-4"><span class="n">04</span> Detalhe da atividade</a>
+    <a class="nav-link" href="#hospede-5"><span class="n">05</span> Dados da reserva</a>
+    <a class="nav-link" href="#hospede-6"><span class="n">06</span> Confirmação</a>
+    <a class="nav-link" href="#hospede-7"><span class="n">07</span> Minhas reservas</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label"><span class="tag tag-inst" style="padding:2px 7px;">Site Institucional</span></div>
+    <a class="nav-link" href="#institucional"><span class="n">01</span> Página inicial</a>
+    <a class="nav-link" href="#institucional-2"><span class="n">02</span> Como funciona</a>
+    <a class="nav-link" href="#institucional-3"><span class="n">03</span> Benefícios</a>
+    <a class="nav-link" href="#institucional-4"><span class="n">04</span> Planos</a>
+    <a class="nav-link" href="#institucional-5"><span class="n">05</span> Fale com vendas</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label"><span class="tag tag-hotel" style="padding:2px 7px;">Portal do Hotel</span></div>
+    <a class="nav-link" href="#portal"><span class="n">01</span> Login</a>
+    <a class="nav-link" href="#portal-2"><span class="n">02</span> Autenticação</a>
+    <a class="nav-link" href="#portal-3"><span class="n">03</span> Atividades</a>
+    <a class="nav-link" href="#portal-4"><span class="n">04</span> Horários e vagas</a>
+    <a class="nav-link" href="#portal-5"><span class="n">05</span> Reservas recebidas</a>
+  </div>
+
+  <div class="sidebar-foot">
+    Capturado em produção<br>15 de agosto de 2026
+  </div>
+</nav>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Guia de uso · três telas, um hóspede</div>
+    <h1>Como o AllStay leva o hóspede da recepção até a reserva confirmada.</h1>
+    <p class="lede">
+      Este guia acompanha, com prints reais do ambiente de produção, os três pontos de contato do AllStay:
+      o hóspede reservando uma atividade pelo celular, o hotel sendo convencido a adotar a plataforma,
+      e a equipe do hotel gerenciando o catálogo e as reservas recebidas.
+    </p>
+
+    <div class="flow-index">
+      <a class="flow-card" href="#hospede">
+        <span class="tag tag-guest">App do Hóspede</span>
+        <h3>Descobrir e reservar</h3>
+        <p>PWA sem instalação — do código do quarto à reserva confirmada em 7 passos.</p>
+      </a>
+      <a class="flow-card" href="#institucional">
+        <span class="tag tag-inst">Site Institucional</span>
+        <h3>Convencer o hotel</h3>
+        <p>Site B2B para prospects — proposta de valor, planos e contato comercial.</p>
+      </a>
+      <a class="flow-card" href="#portal">
+        <span class="tag tag-hotel">Portal do Hotel</span>
+        <h3>Gerenciar o catálogo</h3>
+        <p>Login da equipe, cadastro de horários e acompanhamento das reservas.</p>
+      </a>
+    </div>
+  </header>
+
+  <!-- ===================== GUEST FLOW ===================== -->
+  <section class="flow" id="hospede">
+    <div class="flow-head">
+      <span class="tag tag-guest">App do Hóspede</span>
+      <h2>Do código do quarto à reserva confirmada</h2>
+    </div>
+    <p class="flow-url mono">app.allstay.eupanda.com.br</p>
+
+    <ol class="steps">
+      <li class="step" id="hospede-1">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Entrada pelo código do hotel</h3>
+          <p>O hóspede escaneia o QR code deixado no quarto — ou abre o link direto e digita o código do hotel manualmente. Não existe instalação: é uma PWA que roda direto no navegador do celular.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">app.allstay.eupanda.com.br</div>
+            </div>
+            <img src="__IMG_G1__" alt="Tela inicial do app do hóspede pedindo o código do hotel">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="hospede-2">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Código do hotel</h3>
+          <p>Neste exemplo, o código é <strong>curacau-resort</strong>, do hotel demo Curaçau Resort &amp; Spa. Cada propriedade tem o seu — é o que isola o catálogo de atividades de cada hotel.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">app.allstay.eupanda.com.br</div>
+            </div>
+            <img src="__IMG_G2__" alt="Campo de código do hotel preenchido com curacau-resort">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="hospede-3">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Catálogo do hotel</h3>
+          <p>Ao entrar, o hóspede cai direto no catálogo do Curaçau Resort &amp; Spa: atividades filtráveis por categoria (Bem-estar, Gastronomia, Passeios, Spa), com duração e preço — ou "Incluso na estadia" quando não há cobrança.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">app.allstay.eupanda.com.br/catalog</div>
+            </div>
+            <img src="__IMG_G3__" alt="Catálogo de atividades do hotel com filtros por categoria">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="hospede-4">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>Detalhe da atividade e horário</h3>
+          <p>Abrindo o Passeio de Catamarã ao Pôr do Sol, o hóspede vê a descrição completa e os horários com vagas disponíveis. Selecionar um horário abre o formulário de reserva na mesma tela.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">app.allstay.eupanda.com.br/activity/0fe9c26c…</div>
+            </div>
+            <img src="__IMG_G4__" alt="Página de detalhe de atividade com horários disponíveis">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="hospede-5">
+        <div class="step-num">05</div>
+        <div class="step-body">
+          <h3>Dados da reserva</h3>
+          <p>Com o horário <strong>15/08 09:00</strong> selecionado, basta o nome do hóspede e o número do quarto — sem senha, sem cadastro. A cobrança, quando existe, vai direto para a conta do quarto.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">app.allstay.eupanda.com.br/activity/0fe9c26c…</div>
+            </div>
+            <img src="__IMG_G5__" alt="Formulário de reserva preenchido com nome e número do quarto">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="hospede-6">
+        <div class="step-num">06</div>
+        <div class="step-body">
+          <h3>Reserva confirmada</h3>
+          <p>Confirmação imediata, sem esperar a recepção. Daqui o hóspede pode seguir reservando outras atividades ou ir direto para "Minhas reservas".</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">app.allstay.eupanda.com.br/activity/0fe9c26c…</div>
+            </div>
+            <img src="__IMG_G6__" alt="Tela de confirmação de reserva">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="hospede-7">
+        <div class="step-num">07</div>
+        <div class="step-body">
+          <h3>Minhas reservas</h3>
+          <p>Buscando pelo número do quarto, o hóspede revê todas as reservas ativas e pode cancelar direto por aqui — sem precisar ligar para a recepção.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">app.allstay.eupanda.com.br/reservations</div>
+            </div>
+            <img src="__IMG_G7__" alt="Lista de reservas do hóspede buscada pelo número do quarto">
+          </div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ===================== INSTITUTIONAL FLOW ===================== -->
+  <section class="flow" id="institucional">
+    <div class="flow-head">
+      <span class="tag tag-inst">Site Institucional</span>
+      <h2>Convencendo o hotel a adotar o AllStay</h2>
+    </div>
+    <p class="flow-url mono">allstay.eupanda.com.br</p>
+
+    <ol class="steps">
+      <li class="step" id="institucional-1">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Página inicial</h3>
+          <p>Site B2B voltado a donos e gerentes de hotel — não ao hóspede. A promessa central: tirar o hóspede da fila da recepção, com acesso via QR code e sem instalação.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">allstay.eupanda.com.br</div>
+            </div>
+            <img src="__IMG_I1__" alt="Página inicial do site institucional AllStay">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="institucional-2">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>O produto em uso</h3>
+          <p>Mockup do próprio app do hóspede embutido na página, mostrando o catálogo real — spa, passeio de escuna e outras atividades — para dar concretude à promessa.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">allstay.eupanda.com.br</div>
+            </div>
+            <img src="__IMG_I2__" alt="Seção do site mostrando um mockup do app do hóspede">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="institucional-3">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Por que hotéis escolhem o AllStay</h3>
+          <p>Três argumentos de venda condensados em números: catálogo único, reserva em menos de 30 segundos e aumento esperado de ticket médio e NPS.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">allstay.eupanda.com.br</div>
+            </div>
+            <img src="__IMG_I3__" alt="Seção de benefícios do AllStay para hotéis">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="institucional-4">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>Planos</h3>
+          <p>Três faixas de preço — Essential, Professional e Enterprise — cada uma com o próximo degrau de recursos: do catálogo básico ao squad dedicado para redes hoteleiras.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">allstay.eupanda.com.br</div>
+            </div>
+            <img src="__IMG_I4__" alt="Seção de planos e preços do AllStay">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="institucional-5">
+        <div class="step-num">05</div>
+        <div class="step-body">
+          <h3>Fale com vendas</h3>
+          <p>Formulário de contato que gera um lead no backend — nome do hotel, responsável e e-mail — para o time comercial dar sequência com um diagnóstico personalizado.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">allstay.eupanda.com.br/Contact</div>
+            </div>
+            <img src="__IMG_I5__" alt="Formulário de contato do site institucional">
+          </div>
+          <div class="note"><strong>Nota:</strong> o formulário não foi enviado nesta captura, para não gerar um lead fictício na base de produção.</div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ===================== HOTEL PORTAL FLOW ===================== -->
+  <section class="flow" id="portal">
+    <div class="flow-head">
+      <span class="tag tag-hotel">Portal do Hotel</span>
+      <h2>Gerenciando catálogo e reservas do lado do hotel</h2>
+    </div>
+    <p class="flow-url mono">hotel.allstay.eupanda.com.br</p>
+
+    <ol class="steps">
+      <li class="step" id="portal-1">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Login da equipe</h3>
+          <p>Acesso restrito à equipe do hotel — gerente, recepção ou coordenador de atividades. Autenticação por e-mail e senha, com JWT no backend.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Login</div>
+            </div>
+            <img src="__IMG_H1__" alt="Tela de login do portal do hotel">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="portal-2">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Autenticação</h3>
+          <p>Login com a conta demo da gerente Ana Souza (Curaçau Resort &amp; Spa). Cada hotel tem sua própria conta — sem acesso cruzado entre propriedades.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Login</div>
+            </div>
+            <img src="__IMG_H2__" alt="Login preenchido com e-mail e senha da equipe do hotel">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="portal-3">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Atividades do hotel</h3>
+          <p>Visão geral do catálogo: cada card mostra categoria, preço, duração e vagas futuras já abertas. A reserva feita no app do hóspede aparece aqui em tempo real — repare nas <strong>23 vagas futuras</strong> do Catamarã, uma a menos que o padrão.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Activities</div>
+            </div>
+            <img src="__IMG_H3__" alt="Lista de atividades do hotel no portal de gestão">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="portal-4">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>Horários e vagas</h3>
+          <p>Dentro de cada atividade, a equipe abre novos horários (data, hora e capacidade) e acompanha, horário a horário, quantas vagas já foram reservadas — a linha das 09:00 já mostra a reserva feita pelo hóspede no passo anterior.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/ActivityDetail/0fe9c26c…</div>
+            </div>
+            <img src="__IMG_H4__" alt="Gestão de horários e vagas de uma atividade">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="portal-5">
+        <div class="step-num">05</div>
+        <div class="step-body">
+          <h3>Reservas recebidas</h3>
+          <p>Todas as reservas do hotel em uma única lista, com hóspede, quarto, horário e status. A reserva de Mariana Costa feita no app aparece aqui, confirmada, fechando o ciclo entre os dois lados da plataforma.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Reservations</div>
+            </div>
+            <img src="__IMG_H5__" alt="Lista de reservas recebidas pelo hotel">
+          </div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <footer class="doc-foot">
+    Guia gerado a partir do ambiente de produção do AllStay (HostAzul) em 15 de agosto de 2026.
+    Hotel demo: Curaçau Resort &amp; Spa (código <span class="mono">curacau-resort</span>).
+  </footer>
+</main>
