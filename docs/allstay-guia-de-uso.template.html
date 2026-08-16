@@ -22,6 +22,8 @@
     --tag-inst-fg: #2c4a9c;
     --tag-hotel-bg: #e3e9dc;
     --tag-hotel-fg: #45633a;
+    --tag-admin-bg: #eee0f7;
+    --tag-admin-fg: #6a3f96;
     --shadow: 0 1px 2px rgba(28, 30, 34, 0.04), 0 8px 24px -12px rgba(28, 30, 34, 0.18);
     --chrome-bg: #e4e1d6;
     --chrome-dot-1: #e0645a;
@@ -46,6 +48,8 @@
       --tag-inst-fg: #9db3ee;
       --tag-hotel-bg: #232c1f;
       --tag-hotel-fg: #a9c99c;
+      --tag-admin-bg: #2c2140;
+      --tag-admin-fg: #c9a9ec;
       --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -16px rgba(0, 0, 0, 0.6);
       --chrome-bg: #2a2e35;
       --chrome-dot-1: #e0645a;
@@ -226,7 +230,7 @@
 
   .flow-index {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     gap: 12px;
   }
 
@@ -254,6 +258,7 @@
   .tag-guest { background: var(--tag-guest-bg); color: var(--tag-guest-fg); }
   .tag-inst { background: var(--tag-inst-bg); color: var(--tag-inst-fg); }
   .tag-hotel { background: var(--tag-hotel-bg); color: var(--tag-hotel-fg); }
+  .tag-admin { background: var(--tag-admin-bg); color: var(--tag-admin-fg); }
 
   .flow-card h3 {
     font-size: 15px;
@@ -477,6 +482,17 @@
     <a class="nav-link" href="#portal-5"><span class="n">05</span> Reservas recebidas</a>
   </div>
 
+  <div class="nav-group">
+    <div class="nav-group-label"><span class="tag tag-admin" style="padding:2px 7px;">Admin</span></div>
+    <a class="nav-link" href="#admin"><span class="n">01</span> Login administrativo</a>
+    <a class="nav-link" href="#admin-2"><span class="n">02</span> Autenticação</a>
+    <a class="nav-link" href="#admin-3"><span class="n">03</span> Hotéis cadastrados</a>
+    <a class="nav-link" href="#admin-4"><span class="n">04</span> Cadastro de hotel</a>
+    <a class="nav-link" href="#admin-5"><span class="n">05</span> Equipe do hotel</a>
+    <a class="nav-link" href="#admin-6"><span class="n">06</span> Novo acesso</a>
+    <a class="nav-link" href="#admin-7"><span class="n">07</span> Leads comerciais</a>
+  </div>
+
   <div class="sidebar-foot">
     Capturado em produção<br>15 de agosto de 2026
   </div>
@@ -507,6 +523,11 @@
         <span class="tag tag-hotel">Portal do Hotel</span>
         <h3>Gerenciar o catálogo</h3>
         <p>Login da equipe, cadastro de horários e acompanhamento das reservas.</p>
+      </a>
+      <a class="flow-card" href="#admin">
+        <span class="tag tag-admin">Admin</span>
+        <h3>Gerenciar hotéis e acessos</h3>
+        <p>Cadastro e ativação de hotéis, acessos da equipe e funil de leads comerciais.</p>
       </a>
     </div>
   </header>
@@ -800,8 +821,126 @@
     </ol>
   </section>
 
+  <!-- ===================== ADMIN FLOW ===================== -->
+  <section class="flow" id="admin">
+    <div class="flow-head">
+      <span class="tag tag-admin">Admin</span>
+      <h2>Gerenciando hotéis e acessos da plataforma</h2>
+    </div>
+    <p class="flow-url mono">hotel.allstay.eupanda.com.br/Admin</p>
+
+    <ol class="steps">
+      <li class="step" id="admin-1">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Login administrativo</h3>
+          <p>Acesso separado do login da equipe do hotel, protegido por uma senha de operador compartilhada — usada para criar hotéis, ativar/desativar acessos e consultar leads comerciais.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Admin/Login</div>
+            </div>
+            <img src="__IMG_A1__" alt="Tela de login administrativo do AllStay">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="admin-2">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Autenticação</h3>
+          <p>A senha de administrador é validada no backend e nunca chega ao navegador do hotel — fica apenas na configuração do servidor, usada para assinar as chamadas à API administrativa.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Admin/Login</div>
+            </div>
+            <img src="__IMG_A2__" alt="Campo de senha de administrador preenchido">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="admin-3">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Hotéis cadastrados</h3>
+          <p>Visão geral de todos os hotéis da plataforma — nome, código, plano e status. Daqui é possível ativar ou desativar o acesso de um hotel inteiro, e entrar na equipe de cada um.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Admin</div>
+            </div>
+            <img src="__IMG_A3__" alt="Lista de hotéis cadastrados no painel administrativo">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="admin-4">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>Cadastro de hotel</h3>
+          <p>Onboarding de um novo hotel: nome, código usado no link/QR do hóspede, plano (Essential, Professional ou Enterprise) e dados de contato.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Admin</div>
+            </div>
+            <img src="__IMG_A4__" alt="Formulário de cadastro de novo hotel">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="admin-5">
+        <div class="step-num">05</div>
+        <div class="step-body">
+          <h3>Equipe do hotel</h3>
+          <p>Ao abrir a equipe do Curaçau Resort &amp; Spa, o administrador vê todos os acessos cadastrados — começando pela gerênte Ana Souza, usada nos exemplos de login do Portal do Hotel — com função e status.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Admin/HotelStaff?hotelId=f67d5c30…</div>
+            </div>
+            <img src="__IMG_A5__" alt="Lista de acessos da equipe de um hotel">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="admin-6">
+        <div class="step-num">06</div>
+        <div class="step-body">
+          <h3>Novo acesso</h3>
+          <p>Criar um novo login para a equipe do hotel pede nome, e-mail, senha e função (Manager, FrontDesk ou ActivityCoordinator) — o mesmo acesso usado depois para entrar no Portal do Hotel.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Admin/HotelStaff?hotelId=f67d5c30…</div>
+            </div>
+            <img src="__IMG_A6__" alt="Formulário de criação de novo acesso para a equipe">
+          </div>
+        </div>
+      </li>
+
+      <li class="step" id="admin-7">
+        <div class="step-num">07</div>
+        <div class="step-body">
+          <h3>Leads comerciais</h3>
+          <p>Todos os leads gerados pelo formulário "Fale com vendas" do site institucional aparecem aqui, centralizados para o time comercial — sem nenhum acesso cruzado com a equipe dos hotéis.</p>
+          <div class="browser-frame">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">hotel.allstay.eupanda.com.br/Admin/Leads</div>
+            </div>
+            <img src="__IMG_A7__" alt="Lista de leads comerciais no painel administrativo">
+          </div>
+          <div class="note"><strong>Nota:</strong> a lista está vazia porque o formulário de contato não foi enviado durante a captura deste guia, para não gerar um lead fictício na base de produção.</div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
   <footer class="doc-foot">
-    Guia gerado a partir do ambiente de produção do AllStay (HostAzul) em 15 de agosto de 2026.
+    Guia gerado a partir do ambiente de produção do AllStay (HostAzul) em 15 de agosto de 2026,
+    com a seção de Admin adicionada em 16 de agosto de 2026.
     Hotel demo: Curaçau Resort &amp; Spa (código <span class="mono">curacau-resort</span>).
   </footer>
 </main>
