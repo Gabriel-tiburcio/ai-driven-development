@@ -58,5 +58,34 @@ public class HotelService(AllStayDbContext db) : IHotelService
         return new StaffProfileDto(staff.Id, staff.Email, staff.FullName, staff.Role, hotel.Id, hotel.Name);
     }
 
+    public async Task<IReadOnlyList<HotelStaffDto>> ListStaffAsync(Guid hotelId, CancellationToken ct = default)
+    {
+        return await db.HotelStaffUsers
+            .Where(s => s.HotelId == hotelId)
+            .OrderBy(s => s.FullName)
+            .Select(s => new HotelStaffDto(s.Id, s.Email, s.FullName, s.Role, s.IsActive, s.CreatedAt))
+            .ToListAsync(ct);
+    }
+
+    public async Task<bool> SetHotelActiveAsync(Guid hotelId, bool isActive, CancellationToken ct = default)
+    {
+        var hotel = await db.Hotels.FirstOrDefaultAsync(h => h.Id == hotelId, ct);
+        if (hotel is null) return false;
+
+        hotel.IsActive = isActive;
+        await db.SaveChangesAsync(ct);
+        return true;
+    }
+
+    public async Task<bool> SetStaffActiveAsync(Guid hotelId, Guid staffId, bool isActive, CancellationToken ct = default)
+    {
+        var staff = await db.HotelStaffUsers.FirstOrDefaultAsync(s => s.Id == staffId && s.HotelId == hotelId, ct);
+        if (staff is null) return false;
+
+        staff.IsActive = isActive;
+        await db.SaveChangesAsync(ct);
+        return true;
+    }
+
     private static HotelDto ToDto(Hotel h) => new(h.Id, h.Name, h.Code, h.Tier, h.IsActive);
 }

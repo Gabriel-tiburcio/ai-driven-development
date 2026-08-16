@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AllStay Admin</title>
+    <link rel="icon" type="image/png" href="~/img/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="app-shell">
+        <header class="app-topbar">
+            <button type="button" class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="appSidebar">
+                <span></span><span></span><span></span>
+            </button>
+            <a class="brand brand-compact" href="/Admin">
+                <img src="~/img/logo.png" alt="AllStay" height="20" />
+                All<span class="text-brand">Stay</span> Admin
+            </a>
+        </header>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <aside class="app-sidebar" id="appSidebar">
+            <a class="brand" href="/Admin">
+                <img src="~/img/logo.png" alt="AllStay" height="24" />
+                All<span class="text-brand">Stay</span> Admin
+            </a>
+            <nav class="app-nav">
+                <a href="/Admin">Hotéis</a>
+                <a href="/Admin/Leads">Leads</a>
+            </nav>
+            <div class="sidebar-footer">
+                <span class="staff-name">Administrador</span>
+                <form method="post" asp-page="/Admin/Logout" style="display:inline;">
+                    <button type="submit" class="link-button">Sair</button>
+                </form>
+            </div>
+        </aside>
+
+        <main class="app-main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

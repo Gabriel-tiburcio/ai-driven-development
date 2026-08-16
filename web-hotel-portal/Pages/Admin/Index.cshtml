@@ -1,0 +1,86 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Hotéis";
+    Layout = "_AdminLayout";
+}
+
+<h1>Hotéis</h1>
+
+<div class="card">
+    <details>
+        <summary>Novo hotel</summary>
+        <form method="post" asp-page-handler="Create" style="margin-top:1rem;">
+            <div class="field">
+                <label asp-for="Input.Name">Nome</label>
+                <input asp-for="Input.Name" required />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Code">Código (usado no link/QR do hóspede)</label>
+                <input asp-for="Input.Code" required />
+                <span asp-validation-for="Input.Code" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Tier">Plano</label>
+                <select asp-for="Input.Tier" asp-items="Html.GetEnumSelectList<AllStay.Web.HotelPortal.Models.HotelTier>()"></select>
+            </div>
+            <div class="field">
+                <label asp-for="Input.ContactEmail">E-mail de contato</label>
+                <input asp-for="Input.ContactEmail" type="email" />
+                <span asp-validation-for="Input.ContactEmail" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.ContactPhone">Telefone de contato</label>
+                <input asp-for="Input.ContactPhone" />
+            </div>
+            <button type="submit">Criar hotel</button>
+        </form>
+    </details>
+</div>
+
+@if (Model.Hotels.Count == 0)
+{
+    <p class="empty-note">Nenhum hotel cadastrado ainda.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Código</th>
+                <th>Plano</th>
+                <th>Status</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var hotel in Model.Hotels)
+            {
+                <tr>
+                    <td>@hotel.Name</td>
+                    <td>@hotel.Code</td>
+                    <td>@hotel.Tier</td>
+                    <td>
+                        @if (hotel.IsActive)
+                        {
+                            <span class="badge badge-status-0">Ativo</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-status-1">Inativo</span>
+                        }
+                    </td>
+                    <td><a asp-page="/Admin/HotelStaff" asp-route-hotelId="@hotel.Id" class="btn secondary">Equipe &rarr;</a></td>
+                    <td>
+                        <form method="post" asp-page-handler="Toggle" asp-route-hotelId="@hotel.Id" asp-route-activate="@(!hotel.IsActive)">
+                            <button type="submit" class="@(hotel.IsActive ? "danger" : "secondary")">@(hotel.IsActive ? "Desativar" : "Ativar")</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,41 @@
+@page
+@model LeadsModel
+@{
+    ViewData["Title"] = "Leads";
+    Layout = "_AdminLayout";
+}
+
+<h1>Leads</h1>
+
+@if (Model.Leads.Count == 0)
+{
+    <p class="empty-note">Nenhum lead recebido ainda.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Hotel</th>
+                <th>Contato</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>Mensagem</th>
+                <th>Recebido em</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lead in Model.Leads)
+            {
+                <tr>
+                    <td>@lead.HotelName</td>
+                    <td>@lead.ContactName</td>
+                    <td>@lead.Email</td>
+                    <td>@lead.Phone</td>
+                    <td>@lead.Message</td>
+                    <td>@lead.CreatedAt.LocalDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

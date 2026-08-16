@@ -1,3 +1,4 @@
+using AllStay.Api.Auth;
 using AllStay.Application.DTOs;
 using AllStay.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -15,8 +16,9 @@ public class LeadsController(ILeadService leadService) : ControllerBase
     public async Task<ActionResult<LeadDto>> Create(CreateLeadRequest request, CancellationToken ct)
         => Ok(await leadService.CreateAsync(request, ct));
 
+    /// <summary>Sales-pipeline view across every hotel lead — admin only, not a hotel-staff concern.</summary>
     [HttpGet]
-    [Authorize]
+    [AdminApiKey]
     public async Task<ActionResult<IReadOnlyList<LeadDto>>> List(CancellationToken ct)
         => Ok(await leadService.ListAsync(ct));
 }

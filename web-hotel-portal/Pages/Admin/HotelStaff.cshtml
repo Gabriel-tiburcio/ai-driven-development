@@ -1,0 +1,81 @@
+@page
+@model HotelStaffModel
+@{
+    ViewData["Title"] = "Equipe";
+    Layout = "_AdminLayout";
+}
+
+<p><a asp-page="/Admin/Index" class="btn secondary">&larr; Hotéis</a></p>
+<h1>Equipe — @Model.Hotel?.Name</h1>
+
+<div class="card">
+    <details>
+        <summary>Novo acesso</summary>
+        <form method="post" asp-page-handler="Create" asp-route-hotelId="@Model.HotelId" style="margin-top:1rem;">
+            <div class="field">
+                <label asp-for="Input.FullName">Nome</label>
+                <input asp-for="Input.FullName" required />
+                <span asp-validation-for="Input.FullName" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Email">E-mail</label>
+                <input asp-for="Input.Email" type="email" autocomplete="off" required />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Password">Senha</label>
+                <input asp-for="Input.Password" type="password" autocomplete="new-password" required />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Role">Função</label>
+                <select asp-for="Input.Role" asp-items="Html.GetEnumSelectList<AllStay.Web.HotelPortal.Models.StaffRole>()"></select>
+            </div>
+            <button type="submit">Criar acesso</button>
+        </form>
+    </details>
+</div>
+
+@if (Model.Staff.Count == 0)
+{
+    <p class="empty-note">Nenhum acesso cadastrado ainda.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Função</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model.Staff)
+            {
+                <tr>
+                    <td>@s.FullName</td>
+                    <td>@s.Email</td>
+                    <td>@s.Role</td>
+                    <td>
+                        @if (s.IsActive)
+                        {
+                            <span class="badge badge-status-0">Ativo</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-status-1">Inativo</span>
+                        }
+                    </td>
+                    <td>
+                        <form method="post" asp-page-handler="Toggle" asp-route-hotelId="@Model.HotelId" asp-route-staffId="@s.Id" asp-route-activate="@(!s.IsActive)">
+                            <button type="submit" class="@(s.IsActive ? "danger" : "secondary")">@(s.IsActive ? "Desativar" : "Ativar")</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

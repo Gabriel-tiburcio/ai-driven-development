@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using AllStay.Web.HotelPortal.Services;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -57,8 +56,8 @@ public class LoginModel(ApiClient api, ILogger<LoginModel> logger) : PageModel
             new(AllStayClaimTypes.Jwt, result.Token),
         };
 
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+        var identity = new ClaimsIdentity(claims, AuthSchemes.Staff);
+        await HttpContext.SignInAsync(AuthSchemes.Staff, new ClaimsPrincipal(identity));
 
         return RedirectToPage("/Activities");
     }

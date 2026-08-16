@@ -10,7 +10,7 @@ namespace AllStay.Web.HotelPortal.Services;
 /// nothing to keep alive between requests. Each call takes the JWT explicitly since there's no
 /// per-connection session state (this is a stateless Razor Pages app; the JWT lives in the auth cookie).
 /// </summary>
-public class ApiClient(IHttpClientFactory httpClientFactory)
+public class ApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration)
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
@@ -20,6 +20,13 @@ public class ApiClient(IHttpClientFactory httpClientFactory)
     {
         var client = Client;
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        return client;
+    }
+
+    private HttpClient AdminClient()
+    {
+        var client = Client;
+        client.DefaultRequestHeaders.Add("X-Admin-Key", configuration["Admin:ApiKey"]);
         return client;
     }
 
@@ -59,4 +66,37 @@ public class ApiClient(IHttpClientFactory httpClientFactory)
 
     public async Task<List<ReservationDto>> GetReservationsAsync(string jwt, Guid hotelId, CancellationToken ct = default)
         => await AuthorizedClient(jwt).GetFromJsonAsync<List<ReservationDto>>($"/api/hotels/{hotelId}/reservations", JsonOptions, ct) ?? [];
+
+    public async Task<List<HotelDto>> GetHotelsAsync(CancellationToken ct = default)
+        => await AdminClient().GetFromJsonAsync<List<HotelDto>>("/api/admin/hotels", JsonOptions, ct) ?? [];
+
+    public async Task<bool> CreateHotelAsync(CreateHotelRequest request, CancellationToken ct = default)
+    {
+        var response = await AdminClient().PostAsJsonAsync("/api/admin/hotels", request, JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> SetHotelActiveAsync(Guid hotelId, bool isActive, CancellationToken ct = default)
+    {
+        var response = await AdminClient().PatchAsJsonAsync($"/api/admin/hotels/{hotelId}/status", new UpdateActiveStatusRequest(isActive), JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<List<HotelStaffDto>> GetHotelStaffAsync(Guid hotelId, CancellationToken ct = default)
+        => await AdminClient().GetFromJsonAsync<List<HotelStaffDto>>($"/api/admin/hotels/{hotelId}/staff", JsonOptions, ct) ?? [];
+
+    public async Task<bool> CreateStaffAsync(Guid hotelId, CreateStaffRequest request, CancellationToken ct = default)
+    {
+        var response = await AdminClient().PostAsJsonAsync($"/api/admin/hotels/{hotelId}/staff", request, JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> SetStaffActiveAsync(Guid hotelId, Guid staffId, bool isActive, CancellationToken ct = default)
+    {
+        var response = await AdminClient().PatchAsJsonAsync($"/api/admin/hotels/{hotelId}/staff/{staffId}/status", new UpdateActiveStatusRequest(isActive), JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<List<LeadDto>> GetLeadsAsync(CancellationToken ct = default)
+        => await AdminClient().GetFromJsonAsync<List<LeadDto>>("/api/leads", JsonOptions, ct) ?? [];
 }
