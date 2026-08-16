@@ -22,7 +22,17 @@
     <div class="app-shell">
         @if (User.Identity?.IsAuthenticated == true)
         {
-            <aside class="app-sidebar">
+            <header class="app-topbar">
+                <button type="button" class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="appSidebar">
+                    <span></span><span></span><span></span>
+                </button>
+                <a class="brand brand-compact" href="/">
+                    <img src="~/img/logo.png" alt="AllStay" height="20" />
+                    All<span class="text-brand">Stay</span>
+                </a>
+            </header>
+            <div class="sidebar-overlay" id="sidebarOverlay"></div>
+            <aside class="app-sidebar" id="appSidebar">
                 <a class="brand" href="/">
                     <img src="~/img/logo.png" alt="AllStay" height="24" />
                     All<span class="text-brand">Stay</span>
@@ -45,6 +55,7 @@
         </main>
     </div>
 
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -293,12 +293,18 @@ button.danger:hover { background: rgba(255,59,48,.08); opacity: 1; }
 
 .bottom-nav a {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.4rem 0.25rem;
   text-align: center;
   text-decoration: none;
   color: var(--ink-dim);
   font-size: 0.75rem;
   font-weight: 600;
   transition: color .15s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .bottom-nav a.active { color: var(--ink); }
