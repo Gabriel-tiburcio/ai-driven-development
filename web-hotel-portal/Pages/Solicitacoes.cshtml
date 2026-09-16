@@ -1,0 +1,41 @@
+@page
+@model SolicitacoesModel
+@{
+    ViewData["Title"] = "Solicitações";
+    Layout = "_Layout";
+}
+
+<h1>Solicitações</h1>
+
+@if (Model.Requests.Count == 0)
+{
+    <p class="empty-note">Nenhuma solicitação recebida ainda.</p>
+}
+else
+{
+    <div class="docket-wall">
+        @foreach (var r in Model.Requests)
+        {
+            <div class="docket-card">
+                <span class="docket-card-category">@r.Type</span>
+                <h3>Quarto @r.RoomNumber &middot; @r.GuestName</h3>
+                <p>@r.Details</p>
+                <div class="docket-card-meta">
+                    <span><strong>@r.Status</strong></span>
+                    <span>@r.CreatedAt.ToLocalTime().ToString("dd/MM HH:mm")</span>
+                </div>
+                @if (r.Status != GuestRequestStatus.Done)
+                {
+                    <form method="post" asp-page-handler="UpdateStatus" style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                        <input type="hidden" name="requestId" value="@r.Id" />
+                        @if (r.Status == GuestRequestStatus.Pending)
+                        {
+                            <button type="submit" name="status" value="@((int)GuestRequestStatus.InProgress)" class="btn secondary">Em andamento</button>
+                        }
+                        <button type="submit" name="status" value="@((int)GuestRequestStatus.Done)" class="btn secondary">Concluído</button>
+                    </form>
+                }
+            </div>
+        }
+    </div>
+}

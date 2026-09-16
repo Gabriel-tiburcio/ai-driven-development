@@ -1,0 +1,53 @@
+using AllStay.Web.HotelPortal.Models;
+using AllStay.Web.HotelPortal.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace AllStay.Web.HotelPortal.Pages;
+
+[Authorize]
+public class EventosModel(ApiClient api) : PageModel
+{
+    public List<EventDto> Events { get; set; } = [];
+
+    [BindProperty]
+    public CreateEventInput Input { get; set; } = new();
+
+    public async Task OnGetAsync()
+    {
+        Events = await api.GetEventsAsync(User.GetHotelId());
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid)
+        {
+            Events = await api.GetEventsAsync(User.GetHotelId());
+            return Page();
+        }
+
+        var request = new CreateEventRequest(
+            Input.Name,
+            string.IsNullOrWhiteSpace(Input.Description) ? null : Input.Description,
+            Input.Category,
+            Input.EventDate,
+            Input.StartTime,
+            Input.Location,
+            null);
+
+        await api.CreateEventAsync(User.GetJwt()!, User.GetHotelId(), request);
+
+        return RedirectToPage();
+    }
+
+    public class CreateEventInput
+    {
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string Category { get; set; } = string.Empty;
+        public DateOnly EventDate { get; set; } = DateOnly.FromDateTime(DateTime.Today);
+        public TimeOnly StartTime { get; set; } = new(19, 0);
+        public string Location { get; set; } = string.Empty;
+    }
+}

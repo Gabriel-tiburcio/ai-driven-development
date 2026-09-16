@@ -1,0 +1,62 @@
+@page
+@model EventosModel
+@{
+    ViewData["Title"] = "Eventos";
+    Layout = "_Layout";
+}
+
+<h1>Eventos</h1>
+
+<div class="card">
+    <details>
+        <summary>Novo evento</summary>
+        <form method="post" style="margin-top:1rem;">
+            <div class="field">
+                <label asp-for="Input.Name">Nome</label>
+                <input asp-for="Input.Name" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Category">Categoria</label>
+                <input asp-for="Input.Category" placeholder="Música, Gastronomia, Festa..." required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Description">Descrição</label>
+                <textarea asp-for="Input.Description"></textarea>
+            </div>
+            <div class="field">
+                <label asp-for="Input.EventDate">Data</label>
+                <input asp-for="Input.EventDate" type="date" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.StartTime">Horário</label>
+                <input asp-for="Input.StartTime" type="time" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Location">Local</label>
+                <input asp-for="Input.Location" required />
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+    </details>
+</div>
+
+@if (Model.Events.Count == 0)
+{
+    <p class="empty-note">Nenhum evento cadastrado ainda.</p>
+}
+else
+{
+    <div class="docket-wall">
+        @foreach (var evt in Model.Events)
+        {
+            <div class="docket-card">
+                <span class="docket-card-category">@evt.Category</span>
+                <h3>@evt.Name</h3>
+                <div class="docket-card-meta">
+                    <span>@evt.EventDate.ToString("dd/MM/yyyy") às @evt.StartTime.ToString("HH:mm")</span>
+                    <span>@evt.Location</span>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -29,6 +29,15 @@
         ],
         "createdAt": "2026-08-15T22:05:32.840Z",
         "reason": "user pinned apple-design skill (apple.com visual language); Inter is that skill's own documented SF-Pro substitute for web use, not a default"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "src/index.css"
+        ],
+        "createdAt": "2026-08-30T20:13:46.163Z",
+        "reason": "pre-existing intentional choice: index.css states this is Apple consumer-app register (SF Pro-style) with Inter as the closest web-safe fallback; not something introduced by this session's work"
       }
     ]
   }

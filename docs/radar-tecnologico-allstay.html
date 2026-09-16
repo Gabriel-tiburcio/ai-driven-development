@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Radar Tecnológico AllStay</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 14mm;
+        }
+        
+        @font-face {
+            font-family: 'Iowan';
+            src: local('Iowan Old Style'), local('Palatino Linotype'), local('Georgia');
+        }
+        
+         :root {
+            --bg: #FBF6EE;
+            --surface: #FFFFFF;
+            --surface-2: #F3EAD9;
+            --ink: #241B12;
+            --ink-soft: #6B5D4A;
+            --ink-faint: #A7987F;
+            --line: #E4D6BE;
+            --accent: #DC7A16;
+            --accent-deep: #A8560B;
+            --accent-soft: #FBE3C4;
+            --teal: #2C7A73;
+            --teal-soft: #DCEEEA;
+            --band: #1C2530;
+            --band-ink: #F3ECDD;
+            --shadow: 0 18px 40px -24px rgba(36, 27, 18, 0.35);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+             :root:not([data-theme="light"]) {
+                --bg: #141A22;
+                --surface: #1B2430;
+                --surface-2: #212B37;
+                --ink: #F3ECDD;
+                --ink-soft: #C2B69E;
+                --ink-faint: #6F7A88;
+                --line: #313D4A;
+                --accent: #F2A93E;
+                --accent-deep: #F7C46B;
+                --accent-soft: #3A2C16;
+                --teal: #59BDB6;
+                --teal-soft: #16302E;
+                --band: #0F141B;
+                --band-ink: #F3ECDD;
+                --shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.55);
+            }
+        }
+        
+         :root[data-theme="dark"] {
+            --bg: #141A22;
+            --surface: #1B2430;
+            --surface-2: #212B37;
+            --ink: #F3ECDD;
+            --ink-soft: #C2B69E;
+            --ink-faint: #6F7A88;
+            --line: #313D4A;
+            --accent: #F2A93E;
+            --accent-deep: #F7C46B;
+            --accent-soft: #3A2C16;
+            --teal: #59BDB6;
+            --teal-soft: #16302E;
+            --band: #0F141B;
+            --band-ink: #F3ECDD;
+            --shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.55);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .display {
+            font-family: 'Iowan', ui-serif, Georgia, serif;
+            font-weight: 400;
+            text-wrap: balance;
+        }
+        
+        .mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .eyebrow {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+        
+        a {
+            color: inherit;
+        }
+        
+        .page {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+        /* ---------- header band ---------- */
+        
+        .band {
+            background: var(--band);
+            color: var(--band-ink);
+            margin-bottom: 2.75rem;
+        }
+        
+        .band-inner {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 2.25rem 1.5rem 2rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+        
+        .band-eyebrow {
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.9rem;
+        }
+        
+        .band-eyebrow .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: inline-block;
+        }
+        
+        .band h1 {
+            margin: 0;
+            font-size: clamp(1.9rem, 4.2vw, 2.6rem);
+            line-height: 1.08;
+        }
+        
+        .band p {
+            margin: 0.85rem 0 0;
+            max-width: 46ch;
+            color: color-mix(in srgb, var(--band-ink) 78%, transparent);
+            font-size: 0.98rem;
+        }
+        
+        .sunmark {
+            flex-shrink: 0;
+            width: 64px;
+            height: 64px;
+        }
+        /* ---------- consigna strip ---------- */
+        
+        .consigna {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem 1.1rem;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 1.25rem 1.4rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .consigna .timer {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.75rem;
+            color: var(--accent-deep);
+            background: var(--accent-soft);
+            border-radius: 999px;
+            padding: 0.3rem 0.65rem;
+            height: fit-content;
+            white-space: nowrap;
+        }
+        
+        .consigna ol {
+            margin: 0;
+            padding-left: 1.1rem;
+            color: var(--ink-soft);
+            font-size: 0.92rem;
+        }
+        
+        .consigna li+li {
+            margin-top: 0.3rem;
+        }
+        
+        .consigna strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+        /* ---------- section headers ---------- */
+        
+        h2.section-title {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            font-size: 1.35rem;
+            margin: 0 0 1.1rem;
+        }
+        
+        h2.section-title .num {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.85rem;
+            color: var(--ink-faint);
+        }
+        
+        section {
+            margin-bottom: 3.25rem;
+        }
+        /* ---------- tech tickets ---------- */
+        
+        .tickets {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .ticket {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 150px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .ticket-main {
+            padding: 1.4rem 1.5rem;
+        }
+        
+        .ticket-main h3 {
+            margin: 0 0 0.55rem;
+            font-size: 1.12rem;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+        
+        .ticket-main h3 .idx {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.8rem;
+            color: var(--ink-faint);
+            font-weight: 400;
+        }
+        
+        .ticket-main p {
+            margin: 0;
+            color: var(--ink-soft);
+            font-size: 0.94rem;
+            max-width: 56ch;
+        }
+        
+        .ticket-stub {
+            border-left: 1px dashed var(--line);
+            background: var(--surface-2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 0.9rem;
+            text-align: center;
+        }
+        
+        .ticket-stub::before,
+        .ticket-stub::after {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--bg);
+            right: 138px;
+        }
+        
+        .ticket-stub::before {
+            top: -9px;
+        }
+        
+        .ticket-stub::after {
+            bottom: -9px;
+        }
+        
+        .chip {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.03em;
+            padding: 0.32rem 0.7rem;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        
+        .chip.done {
+            background: var(--teal-soft);
+            color: var(--teal);
+        }
+        
+        .chip.testing {
+            background: var(--accent-soft);
+            color: var(--accent-deep);
+        }
+        
+        .chip.na {
+            background: var(--surface);
+            color: var(--ink-faint);
+            border: 1px solid var(--line);
+        }
+        
+        .ticket-stub .label {
+            font-size: 0.72rem;
+            color: var(--ink-faint);
+        }
+        /* ---------- verdict callouts ---------- */
+        
+        .verdict {
+            border-radius: 16px;
+            padding: 1.6rem 1.75rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .verdict.advantage {
+            background: linear-gradient(155deg, var(--accent-soft), var(--surface) 70%);
+            border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+        }
+        
+        .verdict.risk {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-top: 1px dashed color-mix(in srgb, var(--accent) 55%, var(--line));
+        }
+        
+        .verdict .kicker {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.7rem;
+        }
+        
+        .verdict .kicker .eyebrow {
+            color: var(--accent-deep);
+        }
+        
+        .verdict h3 {
+            margin: 0 0 0.7rem;
+            font-size: 1.3rem;
+        }
+        
+        .verdict p {
+            margin: 0 0 0.75rem;
+            color: var(--ink-soft);
+            font-size: 0.97rem;
+            max-width: 64ch;
+        }
+        
+        .verdict p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .verdict+.verdict {
+            margin-top: 1.1rem;
+        }
+        /* ---------- footer ---------- */
+        
+        footer {
+            border-top: 1px solid var(--line);
+            padding-top: 1.4rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            color: var(--ink-faint);
+            font-size: 0.8rem;
+        }
+        
+        footer .sources {
+            max-width: 52ch;
+        }
+        
+        @media (max-width: 620px) {
+            .band-inner {
+                flex-direction: column-reverse;
+                align-items: flex-start;
+            }
+            .ticket {
+                grid-template-columns: 1fr;
+            }
+            .ticket-stub {
+                border-left: none;
+                border-top: 1px dashed var(--line);
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 0.85rem 1.4rem;
+            }
+            .ticket-stub::before,
+            .ticket-stub::after {
+                display: none;
+            }
+        }
+        
+        @media (prefers-reduced-motion: no-preference) {
+            .ticket,
+            .verdict,
+            .consigna {
+                transition: transform 0.2s ease;
+            }
+        }
+        
+        @media print {
+            body {
+                background: var(--bg);
+            }
+            .band,
+            .verdict,
+            .ticket,
+            .consigna {
+                box-shadow: none;
+            }
+            section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="band">
+        <div class="band-inner">
+            <div>
+                <div class="band-eyebrow eyebrow"><span class="dot"></span>FIAP MBA</div>
+                <h1 class="display">Radar Tecnológico<br>AllStay</h1>
+            </div>
+            <svg class="sunmark" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g stroke="#DC7A16" stroke-width="4" stroke-linecap="round">
+        <path d="M50 4 L50 16"/>
+        <path d="M50 84 L50 96"/>
+        <path d="M4 50 L16 50"/>
+        <path d="M84 50 L96 50"/>
+        <path d="M17 17 L25.5 25.5"/>
+        <path d="M74.5 74.5 L83 83"/>
+        <path d="M83 17 L74.5 25.5"/>
+        <path d="M25.5 74.5 L17 83"/>
+      </g>
+      <circle cx="50" cy="50" r="24" fill="#DC7A16"/>
+      <path d="M32 60 Q41 52 50 60 T68 60" stroke="#141A22" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55"/>
+    </svg>
+        </div>
+    </div>
+
+    <div class="page">
+
+        <div class="consigna">
+            <ol>
+                <li><strong>Empresa do grupo:</strong> AllStay — catálogo de atividades para hóspedes.</li>
+                <li><strong>Classificar 3 tecnologias:</strong> já implementada, em teste ou não aplicável.</li>
+                <li><strong>Qual gera maior vantagem competitiva?</strong> Justificar.</li>
+                <li><strong>Qual o risco de não adotá-la em 2 anos?</strong></li>
+            </ol>
+        </div>
+
+        <section>
+            <h2 class="section-title"><span class="num mono">01</span> Classificação</h2>
+            <div class="tickets">
+
+                <div class="ticket">
+                    <div class="ticket-main">
+                        <h3><span class="idx">A</span> PWA de entrada sem instalação</h3>
+                        <p>Hóspede escaneia o código do hotel e cai direto no catálogo em <span class="mono" style="font-size:0.85em">app.allstay.eupanda.com.br/h/&lt;codigo-do-hotel&gt;</span> — sem loja de app, sem conta prévia.</p>
+                    </div>
+                    <div class="ticket-stub">
+                        <span class="chip done">✓ implementada</span>
+                        <span class="label">em produção</span>
+                    </div>
+                </div>
+
+                <div class="ticket">
+                    <div class="ticket-main">
+                        <h3><span class="idx">B</span> Recomendação por IA generativa</h3>
+                        <p>Sugerir atividades por perfil, horário e histórico do hóspede em vez de listagem estática. É uma aposta que estamos discutindo.</p>
+                    </div>
+                    <div class="ticket-stub">
+                        <span class="chip testing">◐ em avaliação</span>
+                        <span class="label">sem piloto ainda</span>
+                    </div>
+                </div>
+
+                <div class="ticket">
+                    <div class="ticket-main">
+                        <h3><span class="idx">C</span> Painel analítico para o hotel</h3>
+                        <p>Ocupação por atividade, receita e taxa de conversão do catálogo. Ou seja, não temos uma camada analystics — decisão para o MVP, mas pensamos em implementá-la no futuro.</p>
+                    </div>
+                    <div class="ticket-stub">
+                        <span class="chip na">— não aplicável</span>
+                        <span class="label">fora do escopo do MVP</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title"><span class="num mono">02</span> Maior vantagem competitiva</h2>
+            <div class="verdict advantage">
+                <div class="kicker"><span class="eyebrow">Tecnologia A · PWA sem instalação</span></div>
+                <h3 class="display">A fricção zero é o produto</h3>
+                <p>O hóspede de um hotel tem uma janela de decisão curtíssima: check-in, mala no quarto, e a pergunta "o que dá pra fazer aqui hoje?". Qualquer app concorrente que exija baixar da loja, criar conta e aceitar notificações perde esse hóspede
+                    antes mesmo de mostrar o catálogo — a fricção de instalação é, na prática, o principal funil de abandono desse tipo de produto.</p>
+                <p>O AllStay elimina essa etapa por completo: o QR code do hotel entrega o catálogo pronto, sem fricção nenhuma. É o mecanismo descrito como princípio de produto — "escanear, navegar, reservar, sem instalar" — e é também o que reduz o custo
+                    de adoção do lado do hotel, que não precisa convencer o hóspede a instalar nada para o produto funcionar.</p>
+                <p>É vantagem competitiva de verdade porque é estrutural, não cosmética: um concorrente não a replica ajustando o design, precisa reconstruir a arquitetura de acesso.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title"><span class="num mono">03</span> Risco de não adotar em 2 anos</h2>
+            <div class="verdict risk">
+                <div class="kicker"><span class="eyebrow">Tecnologia B · Recomendação por IA</span></div>
+                <h3 class="display">A simplicidade de hoje vira commodity amanhã</h3>
+                <p>A vantagem atual do AllStay é ausência de fricção — mas fricção de instalação é um problema que qualquer concorrente sério também vai resolver nos próximos anos; não é uma barreira permanente. Quando isso acontecer, a diferenciação passa
+                    a depender de quão relevante é o que o catálogo mostra, não de quão fácil é abri-lo.</p>
+                <p>Hotéis com catálogos maiores — múltiplas atividades, parceiros locais, horários variados — tornam a navegação manual cada vez mais custosa para o hóspede e mais dependente de curadoria manual por parte da equipe do hotel. Sem uma camada
+                    de recomendação, essa curadoria vira trabalho operacional que não escala junto com o crescimento do catálogo.</p>
+                <p>O risco concreto em dois anos não é perder um recurso "bonito": é perder a percepção de produto atualizado frente a hóspedes já acostumados a recomendação personalizada em qualquer outro app que usam — e abrir espaço para um entrante que
+                    copie a entrada sem instalação do AllStay e some inteligência por cima dela.</p>
+            </div>
+        </section>
+
+        <footer>
+            <span class="sources">Gabriel Tiburcio</span>
+            <span>RA: 367171</span>
+        </footer>
+
+    </div>
+</body>
+
+</html>

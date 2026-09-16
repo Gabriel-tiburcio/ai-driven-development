@@ -308,3 +308,116 @@ button.danger:hover { background: rgba(255,59,48,.08); opacity: 1; }
 }
 
 .bottom-nav a.active { color: var(--ink); }
+
+/* ==== Module grid — hub of the 9 POC modules ==== */
+.module-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.module-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: var(--ground);
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1rem 1.1rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-sm);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.module-card:active { transform: scale(.98); }
+.module-card:hover { box-shadow: var(--shadow-md); }
+
+.module-card-icon {
+  font-size: 1.6rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--product-tint);
+  margin-bottom: 0.5rem;
+}
+
+.module-card h3 { margin: 0; }
+
+/* ==== Select fields (match .field input styling) ==== */
+.field select {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--divider);
+  background: var(--ground-alt);
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--ink);
+}
+.field select:focus { outline: none; border-color: var(--link-blue); background: #fff; box-shadow: 0 0 0 3px rgba(0,102,204,.15); }
+
+/* ==== Concierge chat mock ==== */
+.chat-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 1.25rem 0;
+}
+
+.chat-bubble {
+  max-width: 78%;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius-lg);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+.chat-bubble p { margin: 0; }
+.chat-bubble p + p,
+.chat-bubble ul + p,
+.chat-bubble p + ul { margin-top: 0.5rem; }
+.chat-bubble ul { margin: 0; padding-left: 1.1rem; }
+.chat-bubble li + li { margin-top: 0.2rem; }
+
+.chat-bubble.guest {
+  align-self: flex-end;
+  background: var(--ink);
+  color: #fff;
+  border-bottom-right-radius: 0.3rem;
+}
+.chat-bubble.guest .chat-bubble-time { color: rgba(255, 255, 255, 0.65); }
+
+.chat-bubble.concierge {
+  align-self: flex-start;
+  background: var(--product-tint);
+  color: var(--ink);
+  border-bottom-left-radius: 0.3rem;
+}
+.chat-bubble.concierge .chat-bubble-time { color: var(--muted); }
+
+.chat-bubble-time {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+.chat-input-row input {
+  flex: 1;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--divider);
+  background: var(--ground-alt);
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--ink);
+}
+.chat-input-row button { flex: none; }
+
+.chat-disclaimer { text-align: center; margin-top: 0.75rem; }

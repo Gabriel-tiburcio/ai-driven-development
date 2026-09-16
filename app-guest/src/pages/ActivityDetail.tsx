@@ -49,7 +49,7 @@ export default function ActivityDetailPage() {
           <h2>Reserva confirmada!</h2>
           <p>Você vai receber lembretes sobre esta atividade.</p>
           <button onClick={() => navigate("/reservations")}>Ver minhas reservas</button>
-          <button className="secondary" onClick={() => navigate("/catalog")}>
+          <button className="secondary" onClick={() => navigate("/atividades")}>
             Voltar ao catálogo
           </button>
         </div>

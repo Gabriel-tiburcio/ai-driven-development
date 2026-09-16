@@ -1,0 +1,81 @@
+@page
+@model ServicosModel
+@{
+    ViewData["Title"] = "Serviços";
+    Layout = "_Layout";
+}
+
+<h1>Serviços</h1>
+
+<div class="card">
+    <details>
+        <summary>Novo serviço</summary>
+        <form method="post" style="margin-top:1rem;">
+            <div class="field">
+                <label asp-for="Input.Name">Nome</label>
+                <input asp-for="Input.Name" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Category">Categoria</label>
+                <input asp-for="Input.Category" placeholder="Spa, Fitness, Aulas..." required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Description">Descrição</label>
+                <textarea asp-for="Input.Description" required></textarea>
+            </div>
+            <div class="field">
+                <label asp-for="Input.Price">Preço (R$)</label>
+                <input asp-for="Input.Price" type="number" step="0.01" />
+            </div>
+            <div class="field">
+                <label asp-for="Input.DurationMinutes">Duração (minutos)</label>
+                <input asp-for="Input.DurationMinutes" type="number" />
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+    </details>
+</div>
+
+@if (Model.Services.Count == 0)
+{
+    <p class="empty-note">Nenhum serviço cadastrado ainda.</p>
+}
+else
+{
+    <div class="docket-wall">
+        @foreach (var s in Model.Services)
+        {
+            <div class="docket-card">
+                <span class="docket-card-category">@s.Category</span>
+                <h3>@s.Name</h3>
+                <div class="docket-card-meta">
+                    <span><strong>@s.Price.ToString("C")</strong></span>
+                    <span>@s.DurationMinutes min</span>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<h2 style="margin-top:2rem;">Solicitações de contratação</h2>
+
+@if (Model.Requests.Count == 0)
+{
+    <p class="empty-note">Nenhuma solicitação recebida ainda.</p>
+}
+else
+{
+    <div class="docket-wall">
+        @foreach (var r in Model.Requests)
+        {
+            <div class="docket-card">
+                <span class="docket-card-category">@r.ServiceName</span>
+                <h3>Quarto @r.RoomNumber &middot; @r.GuestName</h3>
+                <div class="docket-card-meta">
+                    <span><strong>@r.Status</strong></span>
+                    <span>@r.CreatedAt.ToLocalTime().ToString("dd/MM HH:mm")</span>
+                </div>
+            </div>
+        }
+    </div>
+}

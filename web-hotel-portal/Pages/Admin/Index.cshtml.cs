@@ -33,7 +33,9 @@ public class IndexModel(ApiClient api) : PageModel
             Input.Code,
             Input.Tier,
             string.IsNullOrWhiteSpace(Input.ContactEmail) ? null : Input.ContactEmail,
-            string.IsNullOrWhiteSpace(Input.ContactPhone) ? null : Input.ContactPhone));
+            string.IsNullOrWhiteSpace(Input.ContactPhone) ? null : Input.ContactPhone,
+            string.IsNullOrWhiteSpace(Input.Address) ? null : Input.Address,
+            string.IsNullOrWhiteSpace(Input.City) ? null : Input.City));
 
         return RedirectToPage();
     }
@@ -41,6 +43,14 @@ public class IndexModel(ApiClient api) : PageModel
     public async Task<IActionResult> OnPostToggleAsync(Guid hotelId, bool activate)
     {
         await api.SetHotelActiveAsync(hotelId, activate);
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostUpdateLocationAsync(Guid hotelId, string? address, string? city)
+    {
+        await api.UpdateHotelLocationAsync(hotelId, new UpdateHotelLocationRequest(
+            string.IsNullOrWhiteSpace(address) ? null : address,
+            string.IsNullOrWhiteSpace(city) ? null : city));
         return RedirectToPage();
     }
 
@@ -58,5 +68,9 @@ public class IndexModel(ApiClient api) : PageModel
         public string? ContactEmail { get; set; }
 
         public string? ContactPhone { get; set; }
+
+        public string? Address { get; set; }
+
+        public string? City { get; set; }
     }
 }

@@ -1,0 +1,55 @@
+@page
+@model RestauranteModel
+@{
+    ViewData["Title"] = "Restaurante";
+    Layout = "_Layout";
+}
+
+<h1>Restaurante</h1>
+
+<div class="card">
+    <details>
+        <summary>Novo restaurante</summary>
+        <form method="post" style="margin-top:1rem;">
+            <div class="field">
+                <label asp-for="Input.Name">Nome</label>
+                <input asp-for="Input.Name" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.CuisineType">Tipo de cozinha</label>
+                <input asp-for="Input.CuisineType" placeholder="Italiana, Frutos do mar..." required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Hours">Horário de funcionamento</label>
+                <input asp-for="Input.Hours" placeholder="Todos os dias, 12h-23h" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Description">Descrição</label>
+                <textarea asp-for="Input.Description" required></textarea>
+            </div>
+            <div class="field">
+                <label asp-for="Input.MenuHighlights">Destaques do cardápio (um por linha)</label>
+                <textarea asp-for="Input.MenuHighlights" placeholder="Risoto de camarão&#10;Filé ao molho madeira"></textarea>
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+    </details>
+</div>
+
+@if (Model.Restaurants.Count == 0)
+{
+    <p class="empty-note">Nenhum restaurante cadastrado ainda.</p>
+}
+else
+{
+    <div class="docket-wall">
+        @foreach (var r in Model.Restaurants)
+        {
+            <div class="docket-card">
+                <span class="docket-card-category">@r.CuisineType</span>
+                <h3>@r.Name</h3>
+                <p class="docket-card-meta">@r.Hours</p>
+            </div>
+        }
+    </div>
+}

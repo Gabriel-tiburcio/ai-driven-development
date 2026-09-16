@@ -11,11 +11,14 @@ export default function Layout() {
       </div>
       {hotel && (
         <nav className="bottom-nav">
-          <NavLink to="/catalog" className={({ isActive }) => (isActive ? "active" : "")}>
-            Catálogo
+          <NavLink to="/hub" className={({ isActive }) => (isActive ? "active" : "")}>
+            Início
+          </NavLink>
+          <NavLink to="/concierge" className={({ isActive }) => (isActive ? "active" : "")}>
+            Concierge
           </NavLink>
           <NavLink to="/reservations" className={({ isActive }) => (isActive ? "active" : "")}>
-            Minhas reservas
+            Reservas
           </NavLink>
         </nav>
       )}

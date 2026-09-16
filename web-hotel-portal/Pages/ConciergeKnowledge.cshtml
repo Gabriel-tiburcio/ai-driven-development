@@ -1,0 +1,46 @@
+@page
+@model ConciergeKnowledgeModel
+@{
+    ViewData["Title"] = "Concierge Premium";
+    Layout = "_Layout";
+}
+
+<h1>Concierge Premium</h1>
+<p class="muted">Conteúdo e instruções que vão "treinar" o concierge com IA. Na POC o chat do hóspede ainda é uma prévia visual — este conteúdo é a base para quando a IA entrar em produção.</p>
+
+<div class="card">
+    <details>
+        <summary>Nova nota de conhecimento</summary>
+        <form method="post" style="margin-top:1rem;">
+            <div class="field">
+                <label asp-for="Input.Title">Título</label>
+                <input asp-for="Input.Title" placeholder="Política de late check-out" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Content">Conteúdo</label>
+                <textarea asp-for="Input.Content" required></textarea>
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+    </details>
+</div>
+
+@if (Model.Entries.Count == 0)
+{
+    <p class="empty-note">Nenhuma nota cadastrada ainda.</p>
+}
+else
+{
+    <div class="docket-wall">
+        @foreach (var entry in Model.Entries)
+        {
+            <div class="docket-card">
+                <h3>@entry.Title</h3>
+                <p>@entry.Content</p>
+                <div class="docket-card-meta">
+                    <span>@entry.CreatedAt.ToLocalTime().ToString("dd/MM HH:mm")</span>
+                </div>
+            </div>
+        }
+    </div>
+}

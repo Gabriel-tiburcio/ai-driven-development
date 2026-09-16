@@ -34,6 +34,14 @@
                 <label asp-for="Input.ContactPhone">Telefone de contato</label>
                 <input asp-for="Input.ContactPhone" />
             </div>
+            <div class="field">
+                <label asp-for="Input.Address">Endereço</label>
+                <input asp-for="Input.Address" placeholder="Av. Beira Mar, 1200" />
+            </div>
+            <div class="field">
+                <label asp-for="Input.City">Cidade</label>
+                <input asp-for="Input.City" placeholder="Fortaleza, CE" />
+            </div>
             <button type="submit">Criar hotel</button>
         </form>
     </details>
@@ -51,6 +59,7 @@ else
                 <th>Nome</th>
                 <th>Código</th>
                 <th>Plano</th>
+                <th>Localização</th>
                 <th>Status</th>
                 <th></th>
                 <th></th>
@@ -63,6 +72,22 @@ else
                     <td>@hotel.Name</td>
                     <td>@hotel.Code</td>
                     <td>@hotel.Tier</td>
+                    <td>
+                        <details>
+                            <summary>@(string.IsNullOrWhiteSpace(hotel.Address) && string.IsNullOrWhiteSpace(hotel.City) ? "Não cadastrada" : $"{hotel.Address} {hotel.City}")</summary>
+                            <form method="post" asp-page-handler="UpdateLocation" asp-route-hotelId="@hotel.Id" style="margin-top:0.5rem;">
+                                <div class="field">
+                                    <label>Endereço</label>
+                                    <input name="address" value="@hotel.Address" placeholder="Av. Beira Mar, 1200" />
+                                </div>
+                                <div class="field">
+                                    <label>Cidade</label>
+                                    <input name="city" value="@hotel.City" placeholder="Fortaleza, CE" />
+                                </div>
+                                <button type="submit" class="secondary">Salvar localização</button>
+                            </form>
+                        </details>
+                    </td>
                     <td>
                         @if (hotel.IsActive)
                         {

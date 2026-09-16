@@ -38,3 +38,79 @@ export interface Reservation {
   status: "Confirmed" | "Cancelled" | "CompletedNoShow" | "Completed" | number;
   createdAt: string;
 }
+
+export interface HotelInfoSection {
+  id: string;
+  title: string;
+  icon: string;
+  content: string;
+}
+
+export interface Restaurant {
+  id: string;
+  name: string;
+  description: string;
+  cuisineType: string;
+  hours: string;
+  imageUrl: string | null;
+  menuHighlights: string[];
+}
+
+export interface EventItem {
+  id: string;
+  name: string;
+  description: string | null;
+  eventDate: string;
+  startTime: string;
+  location: string;
+  category: string;
+  imageUrl: string | null;
+}
+
+export interface Service {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  price: number;
+  durationMinutes: number;
+  imageUrl: string | null;
+}
+
+export interface ExternalExperience {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  price: number;
+  durationLabel: string;
+  location: string;
+  imageUrl: string | null;
+}
+
+export interface KidsActivity {
+  id: string;
+  name: string;
+  description: string;
+  ageRange: string;
+  schedule: string;
+  location: string;
+  imageUrl: string | null;
+}
+
+export interface GuestRequest {
+  id: string;
+  type: string;
+  details: string;
+  roomNumber: string;
+  guestName: string;
+  status: "Pending" | "InProgress" | "Done" | number;
+  createdAt: string;
+}
+
+export interface ConciergeMessage {
+  id: string;
+  sender: "guest" | "concierge";
+  text: string;
+  timestamp: string;
+}

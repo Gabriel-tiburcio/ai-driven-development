@@ -1,0 +1,78 @@
+@page
+@model RecreacaoInfantilModel
+@{
+    ViewData["Title"] = "Recreação Infantil";
+    Layout = "_Layout";
+}
+
+<h1>Recreação Infantil</h1>
+
+<div class="card">
+    <details>
+        <summary>Nova atividade</summary>
+        <form method="post" style="margin-top:1rem;">
+            <div class="field">
+                <label asp-for="Input.Name">Nome</label>
+                <input asp-for="Input.Name" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.AgeRange">Faixa etária</label>
+                <input asp-for="Input.AgeRange" placeholder="4 a 8 anos" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Schedule">Horário</label>
+                <input asp-for="Input.Schedule" placeholder="Seg a sex, 10h-12h" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Location">Local</label>
+                <input asp-for="Input.Location" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Description">Descrição</label>
+                <textarea asp-for="Input.Description"></textarea>
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+    </details>
+</div>
+
+@if (Model.Activities.Count == 0)
+{
+    <p class="empty-note">Nenhuma atividade infantil cadastrada ainda.</p>
+}
+else
+{
+    <div class="docket-wall">
+        @foreach (var k in Model.Activities)
+        {
+            <div class="docket-card">
+                <span class="docket-card-category">@k.AgeRange</span>
+                <h3>@k.Name</h3>
+                <p class="docket-card-meta">@k.Schedule &middot; @k.Location</p>
+            </div>
+        }
+    </div>
+}
+
+<h2 style="margin-top:2rem;">Inscrições</h2>
+
+@if (Model.Enrollments.Count == 0)
+{
+    <p class="empty-note">Nenhuma inscrição registrada ainda.</p>
+}
+else
+{
+    <div class="docket-wall">
+        @foreach (var en in Model.Enrollments)
+        {
+            <div class="docket-card">
+                <span class="docket-card-category">@en.KidsActivityName</span>
+                <h3>@en.ChildName (@en.ChildAge)</h3>
+                <div class="docket-card-meta">
+                    <span>Responsável: quarto @en.GuardianRoomNumber</span>
+                    <span>@en.Status</span>
+                </div>
+            </div>
+        }
+    </div>
+}

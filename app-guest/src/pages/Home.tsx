@@ -7,7 +7,7 @@ export default function Home() {
   const navigate = useNavigate();
   const [code, setCode] = useState("");
 
-  if (hotel) return <Navigate to="/catalog" replace />;
+  if (hotel) return <Navigate to="/hub" replace />;
 
   return (
     <div className="screen center">

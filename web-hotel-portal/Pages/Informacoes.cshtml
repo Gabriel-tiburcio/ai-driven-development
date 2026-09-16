@@ -1,0 +1,50 @@
+@page
+@model InformacoesModel
+@{
+    ViewData["Title"] = "Informações";
+    Layout = "_Layout";
+}
+
+<h1>Informações</h1>
+
+<div class="card">
+    <details>
+        <summary>Nova seção</summary>
+        <form method="post" style="margin-top:1rem;">
+            <div class="field">
+                <label asp-for="Input.Title">Título</label>
+                <input asp-for="Input.Title" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Icon">Ícone (emoji)</label>
+                <input asp-for="Input.Icon" placeholder="📶" required />
+            </div>
+            <div class="field">
+                <label asp-for="Input.Content">Conteúdo</label>
+                <textarea asp-for="Input.Content" required></textarea>
+            </div>
+            <div class="field">
+                <label asp-for="Input.SortOrder">Ordem de exibição</label>
+                <input asp-for="Input.SortOrder" type="number" />
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+    </details>
+</div>
+
+@if (Model.Sections.Count == 0)
+{
+    <p class="empty-note">Nenhuma seção cadastrada ainda.</p>
+}
+else
+{
+    <div class="docket-wall">
+        @foreach (var s in Model.Sections)
+        {
+            <div class="docket-card">
+                <span class="docket-card-category">@s.Icon @s.Title</span>
+                <p>@s.Content</p>
+            </div>
+        }
+    </div>
+}

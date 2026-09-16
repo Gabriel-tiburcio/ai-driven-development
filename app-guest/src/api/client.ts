@@ -1,4 +1,15 @@
-import type { Activity, Hotel, Reservation } from "../types";
+import type {
+  Activity,
+  EventItem,
+  ExternalExperience,
+  GuestRequest,
+  Hotel,
+  HotelInfoSection,
+  KidsActivity,
+  Reservation,
+  Restaurant,
+  Service,
+} from "../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "https://localhost:7001";
 
@@ -42,4 +53,72 @@ export const api = {
 
   cancelReservation: (hotelId: string, reservationId: string) =>
     request<void>(`/api/hotels/${hotelId}/reservations/${reservationId}/cancel`, { method: "POST" }),
+
+  getInfoSections: (hotelId: string) => request<HotelInfoSection[]>(`/api/hotels/${hotelId}/info-sections`),
+
+  getEvents: (hotelId: string) => request<EventItem[]>(`/api/hotels/${hotelId}/events`),
+
+  getEvent: (hotelId: string, eventId: string) =>
+    request<EventItem>(`/api/hotels/${hotelId}/events/${eventId}`),
+
+  getGuestRequests: (hotelId: string, room: string) =>
+    request<GuestRequest[]>(`/api/hotels/${hotelId}/requests/mine?room=${encodeURIComponent(room)}`),
+
+  createGuestRequest: (hotelId: string, payload: { type: string; details: string; guestName: string; roomNumber: string }) =>
+    request<GuestRequest>(`/api/hotels/${hotelId}/requests`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  getKidsActivities: (hotelId: string) => request<KidsActivity[]>(`/api/hotels/${hotelId}/kids-activities`),
+
+  getKidsActivity: (hotelId: string, kidsActivityId: string) =>
+    request<KidsActivity>(`/api/hotels/${hotelId}/kids-activities/${kidsActivityId}`),
+
+  enrollKidsActivity: (
+    hotelId: string,
+    kidsActivityId: string,
+    payload: { childName: string; childAge: string; guardianRoomNumber: string; guardianName?: string }
+  ) =>
+    request(`/api/hotels/${hotelId}/kids-activities/${kidsActivityId}/enrollments`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  getRestaurants: (hotelId: string) => request<Restaurant[]>(`/api/hotels/${hotelId}/restaurants`),
+
+  getRestaurant: (hotelId: string, restaurantId: string) =>
+    request<Restaurant>(`/api/hotels/${hotelId}/restaurants/${restaurantId}`),
+
+  getServices: (hotelId: string) => request<Service[]>(`/api/hotels/${hotelId}/services`),
+
+  getService: (hotelId: string, serviceId: string) =>
+    request<Service>(`/api/hotels/${hotelId}/services/${serviceId}`),
+
+  requestService: (hotelId: string, serviceId: string, payload: { guestName: string; roomNumber: string }) =>
+    request(`/api/hotels/${hotelId}/services/${serviceId}/requests`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  getExternalExperiences: (hotelId: string) =>
+    request<ExternalExperience[]>(`/api/hotels/${hotelId}/external-experiences`),
+
+  getExternalExperience: (hotelId: string, experienceId: string) =>
+    request<ExternalExperience>(`/api/hotels/${hotelId}/external-experiences/${experienceId}`),
+
+  requestExternalExperience: (hotelId: string, experienceId: string, payload: { guestName: string; roomNumber: string }) =>
+    request(`/api/hotels/${hotelId}/external-experiences/${experienceId}/requests`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  askConcierge: (
+    hotelId: string,
+    payload: { message: string; history: { role: "guest" | "concierge"; text: string }[] }
+  ) =>
+    request<{ reply: string }>(`/api/hotels/${hotelId}/concierge/chat`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
 };
