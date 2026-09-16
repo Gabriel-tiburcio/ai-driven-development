@@ -22,7 +22,9 @@ public static class DbSeeder
             Name = "Curaçau Resort & Spa",
             Code = DemoHotelCode,
             Tier = HotelTier.Professional,
-            ContactEmail = "contato@curacauresort.com"
+            ContactEmail = "contato@curacauresort.com",
+            Address = "Av. Beira Mar, 1200",
+            City = "Fortaleza, CE"
         };
         db.Hotels.Add(hotel);
 

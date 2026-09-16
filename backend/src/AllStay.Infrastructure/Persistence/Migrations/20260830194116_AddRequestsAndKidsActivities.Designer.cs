@@ -4,6 +4,7 @@ using AllStay.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AllStay.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AllStayDbContext))]
-    partial class AllStayDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260830194116_AddRequestsAndKidsActivities")]
+    partial class AddRequestsAndKidsActivities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,34 +94,6 @@ namespace AllStay.Infrastructure.Persistence.Migrations
                     b.ToTable("ActivitySlots");
                 });
 
-            modelBuilder.Entity("AllStay.Domain.Entities.ConciergeKnowledgeEntry", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("HotelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
-
-                    b.ToTable("ConciergeKnowledgeEntries");
-                });
-
             modelBuilder.Entity("AllStay.Domain.Entities.EventItem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -168,90 +143,6 @@ namespace AllStay.Infrastructure.Persistence.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("AllStay.Domain.Entities.ExperienceRequest", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("ExternalExperienceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("GuestName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("RoomNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExternalExperienceId");
-
-                    b.ToTable("ExperienceRequests");
-                });
-
-            modelBuilder.Entity("AllStay.Domain.Entities.ExternalExperience", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DurationLabel")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid>("HotelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
-
-                    b.ToTable("ExternalExperiences");
-                });
-
             modelBuilder.Entity("AllStay.Domain.Entities.GuestRequest", b =>
                 {
                     b.Property<Guid>("Id")
@@ -298,14 +189,6 @@ namespace AllStay.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("City")
-                        .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -582,131 +465,6 @@ namespace AllStay.Infrastructure.Persistence.Migrations
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("AllStay.Domain.Entities.Restaurant", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CuisineType")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("HotelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Hours")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("MenuHighlights")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
-
-                    b.ToTable("Restaurants");
-                });
-
-            modelBuilder.Entity("AllStay.Domain.Entities.Service", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DurationMinutes")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("HotelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
-
-                    b.ToTable("Services");
-                });
-
-            modelBuilder.Entity("AllStay.Domain.Entities.ServiceRequest", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("GuestName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("RoomNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("ServiceRequests");
-                });
-
             modelBuilder.Entity("AllStay.Domain.Entities.Activity", b =>
                 {
                     b.HasOne("AllStay.Domain.Entities.Hotel", "Hotel")
@@ -729,43 +487,10 @@ namespace AllStay.Infrastructure.Persistence.Migrations
                     b.Navigation("Activity");
                 });
 
-            modelBuilder.Entity("AllStay.Domain.Entities.ConciergeKnowledgeEntry", b =>
-                {
-                    b.HasOne("AllStay.Domain.Entities.Hotel", "Hotel")
-                        .WithMany("ConciergeKnowledgeEntries")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Hotel");
-                });
-
             modelBuilder.Entity("AllStay.Domain.Entities.EventItem", b =>
                 {
                     b.HasOne("AllStay.Domain.Entities.Hotel", "Hotel")
                         .WithMany("Events")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Hotel");
-                });
-
-            modelBuilder.Entity("AllStay.Domain.Entities.ExperienceRequest", b =>
-                {
-                    b.HasOne("AllStay.Domain.Entities.ExternalExperience", "ExternalExperience")
-                        .WithMany("Requests")
-                        .HasForeignKey("ExternalExperienceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ExternalExperience");
-                });
-
-            modelBuilder.Entity("AllStay.Domain.Entities.ExternalExperience", b =>
-                {
-                    b.HasOne("AllStay.Domain.Entities.Hotel", "Hotel")
-                        .WithMany("ExternalExperiences")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -839,39 +564,6 @@ namespace AllStay.Infrastructure.Persistence.Migrations
                     b.Navigation("Slot");
                 });
 
-            modelBuilder.Entity("AllStay.Domain.Entities.Restaurant", b =>
-                {
-                    b.HasOne("AllStay.Domain.Entities.Hotel", "Hotel")
-                        .WithMany("Restaurants")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Hotel");
-                });
-
-            modelBuilder.Entity("AllStay.Domain.Entities.Service", b =>
-                {
-                    b.HasOne("AllStay.Domain.Entities.Hotel", "Hotel")
-                        .WithMany("Services")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Hotel");
-                });
-
-            modelBuilder.Entity("AllStay.Domain.Entities.ServiceRequest", b =>
-                {
-                    b.HasOne("AllStay.Domain.Entities.Service", "Service")
-                        .WithMany("Requests")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Service");
-                });
-
             modelBuilder.Entity("AllStay.Domain.Entities.Activity", b =>
                 {
                     b.Navigation("Slots");
@@ -882,20 +574,11 @@ namespace AllStay.Infrastructure.Persistence.Migrations
                     b.Navigation("Reservations");
                 });
 
-            modelBuilder.Entity("AllStay.Domain.Entities.ExternalExperience", b =>
-                {
-                    b.Navigation("Requests");
-                });
-
             modelBuilder.Entity("AllStay.Domain.Entities.Hotel", b =>
                 {
                     b.Navigation("Activities");
 
-                    b.Navigation("ConciergeKnowledgeEntries");
-
                     b.Navigation("Events");
-
-                    b.Navigation("ExternalExperiences");
 
                     b.Navigation("InfoSections");
 
@@ -903,21 +586,12 @@ namespace AllStay.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Requests");
 
-                    b.Navigation("Restaurants");
-
-                    b.Navigation("Services");
-
                     b.Navigation("StaffUsers");
                 });
 
             modelBuilder.Entity("AllStay.Domain.Entities.KidsActivity", b =>
                 {
                     b.Navigation("Enrollments");
-                });
-
-            modelBuilder.Entity("AllStay.Domain.Entities.Service", b =>
-                {
-                    b.Navigation("Requests");
                 });
 #pragma warning restore 612, 618
         }

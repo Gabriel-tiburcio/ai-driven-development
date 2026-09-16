@@ -22,7 +22,9 @@ public class HotelService(AllStayDbContext db) : IHotelService
             Code = request.Code,
             Tier = request.Tier,
             ContactEmail = request.ContactEmail,
-            ContactPhone = request.ContactPhone
+            ContactPhone = request.ContactPhone,
+            Address = request.Address,
+            City = request.City
         };
 
         db.Hotels.Add(hotel);
@@ -34,7 +36,7 @@ public class HotelService(AllStayDbContext db) : IHotelService
     {
         return await db.Hotels
             .OrderBy(h => h.Name)
-            .Select(h => new HotelDto(h.Id, h.Name, h.Code, h.Tier, h.IsActive))
+            .Select(h => new HotelDto(h.Id, h.Name, h.Code, h.Tier, h.IsActive, h.Address, h.City))
             .ToListAsync(ct);
     }
 
@@ -77,6 +79,17 @@ public class HotelService(AllStayDbContext db) : IHotelService
         return true;
     }
 
+    public async Task<bool> UpdateLocationAsync(Guid hotelId, UpdateHotelLocationRequest request, CancellationToken ct = default)
+    {
+        var hotel = await db.Hotels.FirstOrDefaultAsync(h => h.Id == hotelId, ct);
+        if (hotel is null) return false;
+
+        hotel.Address = request.Address;
+        hotel.City = request.City;
+        await db.SaveChangesAsync(ct);
+        return true;
+    }
+
     public async Task<bool> SetStaffActiveAsync(Guid hotelId, Guid staffId, bool isActive, CancellationToken ct = default)
     {
         var staff = await db.HotelStaffUsers.FirstOrDefaultAsync(s => s.Id == staffId && s.HotelId == hotelId, ct);
@@ -87,5 +100,5 @@ public class HotelService(AllStayDbContext db) : IHotelService
         return true;
     }
 
-    private static HotelDto ToDto(Hotel h) => new(h.Id, h.Name, h.Code, h.Tier, h.IsActive);
+    private static HotelDto ToDto(Hotel h) => new(h.Id, h.Name, h.Code, h.Tier, h.IsActive, h.Address, h.City);
 }

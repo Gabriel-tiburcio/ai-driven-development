@@ -23,6 +23,10 @@ public class AdminController(IHotelService hotelService) : ControllerBase
     public async Task<IActionResult> SetHotelStatus(Guid hotelId, UpdateActiveStatusRequest request, CancellationToken ct)
         => await hotelService.SetHotelActiveAsync(hotelId, request.IsActive, ct) ? NoContent() : NotFound();
 
+    [HttpPatch("hotels/{hotelId:guid}/location")]
+    public async Task<IActionResult> UpdateHotelLocation(Guid hotelId, UpdateHotelLocationRequest request, CancellationToken ct)
+        => await hotelService.UpdateLocationAsync(hotelId, request, ct) ? NoContent() : NotFound();
+
     [HttpGet("hotels/{hotelId:guid}/staff")]
     public async Task<ActionResult<IReadOnlyList<HotelStaffDto>>> ListStaff(Guid hotelId, CancellationToken ct)
         => Ok(await hotelService.ListStaffAsync(hotelId, ct));
