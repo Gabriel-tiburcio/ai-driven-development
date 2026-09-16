@@ -39,8 +39,28 @@ public class RestauranteModel(ApiClient api) : PageModel
             null,
             menuHighlights);
 
-        await api.CreateRestaurantAsync(User.GetJwt()!, User.GetHotelId(), request);
+        var ok = await api.CreateRestaurantAsync(User.GetJwt()!, User.GetHotelId(), request);
+        this.SetToast(ok, "Restaurante criado com sucesso!", "Não foi possível criar o restaurante.");
 
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string description, string cuisineType, string hours, string? menuHighlights, bool isActive)
+    {
+        var highlights = (menuHighlights ?? string.Empty)
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .ToList();
+
+        var request = new UpdateRestaurantRequest(name, description, cuisineType, hours, null, highlights, isActive);
+        var ok = await api.UpdateRestaurantAsync(User.GetJwt()!, User.GetHotelId(), id, request);
+        this.SetToast(ok, "Restaurante atualizado com sucesso!", "Não foi possível salvar as alterações.");
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+    {
+        var ok = await api.DeleteRestaurantAsync(User.GetJwt()!, User.GetHotelId(), id);
+        this.SetToast(ok, "Restaurante excluído.", "Não foi possível excluir o restaurante.");
         return RedirectToPage();
     }
 

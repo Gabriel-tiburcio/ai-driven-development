@@ -56,6 +56,54 @@ else
                     <span><strong>@x.Price.ToString("C")</strong></span>
                     <span>@x.DurationLabel &middot; @x.Location</span>
                 </div>
+                <div class="card-actions">
+                    <button type="button" class="btn secondary" data-modal-target="edit-@x.Id">Editar</button>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@x.Id"
+                          class="js-confirm-delete" data-confirm-message="Excluir a experiência @x.Name?">
+                        <button type="submit" class="danger">Excluir</button>
+                    </form>
+                </div>
+
+                <dialog id="edit-@x.Id" class="modal">
+                    <h3>Editar experiência</h3>
+                    <form method="post" asp-page-handler="Edit" asp-route-id="@x.Id">
+                        <div class="field">
+                            <label>Nome</label>
+                            <input name="name" value="@x.Name" required />
+                        </div>
+                        <div class="field">
+                            <label>Categoria</label>
+                            <input name="category" value="@x.Category" required />
+                        </div>
+                        <div class="field">
+                            <label>Descrição</label>
+                            <textarea name="description" required>@x.Description</textarea>
+                        </div>
+                        <div class="field">
+                            <label>Preço (R$)</label>
+                            <input name="price" type="number" step="0.01" value="@x.Price" />
+                        </div>
+                        <div class="field">
+                            <label>Duração</label>
+                            <input name="durationLabel" value="@x.DurationLabel" required />
+                        </div>
+                        <div class="field">
+                            <label>Local</label>
+                            <input name="location" value="@x.Location" required />
+                        </div>
+                        <div class="field">
+                            <label>Status</label>
+                            <select name="isActive">
+                                <option value="true" selected="@x.IsActive">Ativa</option>
+                                <option value="false" selected="@(!x.IsActive)">Inativa</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn secondary" data-modal-close>Cancelar</button>
+                            <button type="submit">Salvar alterações</button>
+                        </div>
+                    </form>
+                </dialog>
             </div>
         }
     </div>

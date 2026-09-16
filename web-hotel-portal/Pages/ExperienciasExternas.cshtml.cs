@@ -39,8 +39,24 @@ public class ExperienciasExternasModel(ApiClient api) : PageModel
             Input.Location,
             null);
 
-        await api.CreateExternalExperienceAsync(User.GetJwt()!, User.GetHotelId(), request);
+        var ok = await api.CreateExternalExperienceAsync(User.GetJwt()!, User.GetHotelId(), request);
+        this.SetToast(ok, "Experiência criada com sucesso!", "Não foi possível criar a experiência.");
 
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string category, string description, decimal price, string durationLabel, string location, bool isActive)
+    {
+        var request = new UpdateExternalExperienceRequest(name, description, category, price, durationLabel, location, null, isActive);
+        var ok = await api.UpdateExternalExperienceAsync(User.GetJwt()!, User.GetHotelId(), id, request);
+        this.SetToast(ok, "Experiência atualizada com sucesso!", "Não foi possível salvar as alterações.");
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+    {
+        var ok = await api.DeleteExternalExperienceAsync(User.GetJwt()!, User.GetHotelId(), id);
+        this.SetToast(ok, "Experiência excluída.", "Não foi possível excluir a experiência.");
         return RedirectToPage();
     }
 

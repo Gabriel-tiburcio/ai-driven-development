@@ -390,4 +390,32 @@ details[open] summary:before { content: "\2212 "; }
 
 .empty-note { font-size: 0.9rem; color: var(--ink-dim); }
 
+/* ==== Edit modal (native <dialog>) ==== */
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+.card-actions .btn,
+.card-actions button {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+}
+dialog.modal {
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  width: min(480px, calc(100vw - 2rem));
+  box-shadow: var(--shadow-md);
+}
+dialog.modal::backdrop { background: rgba(0, 0, 0, 0.4); }
+dialog.modal h3 { margin: 0 0 1rem; font-size: 1.05rem; }
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+}
+
 .back-link { display: inline-block; margin-bottom: 1rem; font-size: 0.85rem; }

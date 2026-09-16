@@ -35,8 +35,32 @@ public class ActivitiesModel(ApiClient api) : PageModel
             Input.DurationMinutes,
             null);
 
-        await api.CreateActivityAsync(User.GetJwt()!, User.GetHotelId(), request);
+        var ok = await api.CreateActivityAsync(User.GetJwt()!, User.GetHotelId(), request);
+        this.SetToast(ok, "Atividade criada com sucesso!", "Não foi possível criar a atividade.");
 
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string category, string? description, decimal price, int durationMinutes, bool isActive)
+    {
+        var request = new UpdateActivityRequest(
+            name,
+            string.IsNullOrWhiteSpace(description) ? null : description,
+            category,
+            price,
+            durationMinutes,
+            null,
+            isActive);
+
+        var ok = await api.UpdateActivityAsync(User.GetJwt()!, User.GetHotelId(), id, request);
+        this.SetToast(ok, "Atividade atualizada com sucesso!", "Não foi possível salvar as alterações.");
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+    {
+        var ok = await api.DeleteActivityAsync(User.GetJwt()!, User.GetHotelId(), id);
+        this.SetToast(ok, "Atividade excluída.", "Não foi possível excluir a atividade.");
         return RedirectToPage();
     }
 

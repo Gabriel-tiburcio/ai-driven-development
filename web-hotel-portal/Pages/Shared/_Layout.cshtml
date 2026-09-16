@@ -9,8 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.14.5/sweetalert2.all.min.js"></script>
 </head>
-<body>
+@{
+    var toastMessage = TempData["ToastMessage"] as string;
+    var toastType = TempData["ToastType"] as string ?? "success";
+}
+<body data-toast-message="@toastMessage" data-toast-type="@toastType">
     <!-- impeccable:direction
     THESIS: brief-pinned — Apple's own System Settings / App Store Connect register, replacing the prior switchboard identity per explicit user request. Operate mode: quiet neutral chrome over marketing pacing.
     OWN-WORLD: near-white grounds, a fixed light sidebar (Apple Settings convention), grouped inset lists and hairline dividers, Inter, AllStay orange reserved for category/state emphasis only.

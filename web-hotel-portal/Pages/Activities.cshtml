@@ -55,7 +55,51 @@ else
                 <div class="docket-card-slots">
                     <strong>@activity.Slots.Sum(s => s.AvailableSpots)</strong> vagas futuras
                 </div>
-                <a asp-page="/ActivityDetail" asp-route-id="@activity.Id" class="btn secondary">Abrir docket &rarr;</a>
+                <div class="card-actions">
+                    <a asp-page="/ActivityDetail" asp-route-id="@activity.Id" class="btn secondary">Vagas</a>
+                    <button type="button" class="btn secondary" data-modal-target="edit-@activity.Id">Editar</button>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@activity.Id"
+                          class="js-confirm-delete" data-confirm-message="Excluir a atividade @activity.Name?">
+                        <button type="submit" class="danger">Excluir</button>
+                    </form>
+                </div>
+
+                <dialog id="edit-@activity.Id" class="modal">
+                    <h3>Editar atividade</h3>
+                    <form method="post" asp-page-handler="Edit" asp-route-id="@activity.Id">
+                        <div class="field">
+                            <label>Nome</label>
+                            <input name="name" value="@activity.Name" required />
+                        </div>
+                        <div class="field">
+                            <label>Categoria</label>
+                            <input name="category" value="@activity.Category" required />
+                        </div>
+                        <div class="field">
+                            <label>Descrição</label>
+                            <textarea name="description">@activity.Description</textarea>
+                        </div>
+                        <div class="field">
+                            <label>Preço (R$)</label>
+                            <input name="price" type="number" step="0.01" value="@activity.Price" />
+                        </div>
+                        <div class="field">
+                            <label>Duração (minutos)</label>
+                            <input name="durationMinutes" type="number" value="@activity.DurationMinutes" />
+                        </div>
+                        <div class="field">
+                            <label>Status</label>
+                            <select name="isActive">
+                                <option value="true" selected="@activity.IsActive">Ativa</option>
+                                <option value="false" selected="@(!activity.IsActive)">Inativa</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn secondary" data-modal-close>Cancelar</button>
+                            <button type="submit">Salvar alterações</button>
+                        </div>
+                    </form>
+                </dialog>
             </div>
         }
     </div>

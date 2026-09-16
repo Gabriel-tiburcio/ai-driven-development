@@ -140,4 +140,34 @@ Registro de prompts, decisões e correções feitas durante o desenvolvimento as
 - Build backend: 0 erros. `npx tsc --noEmit` no `app-guest`: sem erros.
 - Ainda não testado em produção após essas mudanças — pendente de novo deploy + validação do usuário.
 
+## 14. Sessão de 2026-09-16 (cont.) — botões de excluir no backoffice (web-hotel-portal)
+
+- Feedback do usuário testando o portal: nenhuma tela tinha opção de excluir os itens cadastrados (Atividades, Eventos, Notas do Concierge, Experiências Externas, Restaurantes, Serviços, Recreação Infantil, Informações).
+- Antes de implementar, rodei uma exploração (`Explore`) que confirmou algo importante: **o backend já tinha os endpoints `DELETE` prontos para todas as 8 entidades** (`ActivitiesController`, `EventsController`, `ConciergeKnowledgeController`, `ExternalExperiencesController`, `RestaurantsController`, `ServicesController`, `KidsActivitiesController`, `HotelInfoSectionsController`) — só faltava a UI no portal chamá-los. Nenhuma mudança de backend foi necessária.
+- `web-hotel-portal/Services/ApiClient.cs`: adicionados 8 métodos `DeleteXAsync(jwt, hotelId, id)`, um por entidade, seguindo o padrão já usado por `DeleteSlotAsync`.
+- Cada `.cshtml.cs` das 8 páginas ganhou um handler `OnPostDeleteAsync(Guid id)` chamando o método correspondente e redirecionando de volta.
+- Cada `.cshtml` ganhou um botão "Excluir" por card, com `onsubmit="return confirm(...)"` — não havia nenhum padrão de confirmação (`confirm()`) no código antes; foi introduzido agora, e é aplicado de forma consistente nas 8 telas.
+- `dotnet build` no `web-hotel-portal`: 0 erros, 0 avisos.
+- Escopo desta rodada: só exclusão (o que o usuário pediu com mais ênfase — "nada tem opção de exclusão"). Edição (`PUT`) não foi implementada — o backend já suporta `PUT` para 6 das 8 entidades (só `ConciergeKnowledge` não tem update), mas isso ficou de fora por não ter sido pedido; se quiser, é a próxima extensão natural.
+- Ainda não testado em produção — pendente de deploy do `web-hotel-portal`.
+
+## 15. Sessão de 2026-09-16 (cont.) — botões de editar no backoffice
+
+- Usuário confirmou que também queria edição, não só exclusão, para as mesmas 8 entidades.
+- **Notas do Concierge não tinham endpoint de atualização no backend** — foi o único caso que exigiu mudança de backend: `UpdateConciergeKnowledgeEntryRequest` (DTO), `UpdateAsync` em `IConciergeKnowledgeService`/`ConciergeKnowledgeService`, e `PUT /api/hotels/{hotelId}/concierge-knowledge/{entryId}` em `ConciergeKnowledgeController`. As outras 7 entidades já tinham `PUT` pronto no backend.
+- `web-hotel-portal`: mirror dos 8 `UpdateXRequest` em `Models/Dtos.cs`; 8 métodos `UpdateXAsync` em `ApiClient.cs` (todos via `PutAsJsonAsync`).
+- Cada uma das 8 páginas ganhou um handler `OnPostEditAsync(...)` e um formulário de edição expansível (`<details><summary>Editar</summary>...`) por card, pré-preenchido com os valores atuais do item — mesmo padrão visual usado no `Admin/Index.cshtml` para editar localização do hotel. Campo de status (Ativo/Inativo) implementado como `<select>` em vez de checkbox, para evitar a complexidade de model binding de checkboxes HTML em formulários sem tag helpers `asp-for`.
+- `dotnet build` no backend e no portal: 0 erros/avisos nos dois (a build do portal já compila as Razor Views, então confirma que não há erro de sintaxe nos `.cshtml` também).
+- Ainda não testado em produção — pendente de deploy do backend (novo endpoint PUT) e do portal (UI de edição).
+
+## 16. Sessão de 2026-09-16 (cont.) — modais + SweetAlert2 no backoffice
+
+- Feedback do usuário: os botões de editar/excluir ficaram "muito soltos" na tela (formulários `<details>` expandindo inline), e pediu para (1) a edição virar um modal e (2) usar SweetAlert2 para confirmação de exclusão e mensagens de sucesso/erro.
+- **Modais de edição**: convertidos de `<details>` inline para `<dialog class="modal">` nativo do HTML, aberto via botão "Editar" (`data-modal-target`) e fechado por botão "Cancelar" (`data-modal-close`), clique no backdrop, ou Esc (nativo do `<dialog>`). CSS novo em `site.css` (`.card-actions`, `dialog.modal`, `.modal-actions`). JS de abertura/fechamento centralizado em `site.js` (uma única IIFE delegada, sem duplicar lógica por página).
+- **SweetAlert2**: adicionado via CDN (`cdnjs`) no `_Layout.cshtml`. Dois usos:
+  1. Confirmação de exclusão: os forms de delete perderam o `onsubmit="return confirm(...)"` nativo e ganharam `class="js-confirm-delete" data-confirm-message="..."`; um listener delegado em `site.js` intercepta o submit, mostra `Swal.fire` com confirmação, e reenvia o form (`requestSubmit()`) só se confirmado — com uma flag (`data-confirm-submitted`) pra não cair em loop infinito de interceptação.
+  2. Toast de sucesso/erro após qualquer ação (criar/editar/excluir): criado `web-hotel-portal/Services/ToastExtensions.cs` com um método de extensão `SetToast(bool success, string successMessage, string errorMessage)` para `PageModel`, chamado em todos os handlers `OnPostAsync`/`OnPostEditAsync`/`OnPostDeleteAsync` das 8 páginas (antes esses handlers ignoravam o `bool` de sucesso retornado pela API — agora ele decide a mensagem). A mensagem vai para `TempData`, que o `_Layout.cshtml` lê e renderiza como atributos `data-toast-message`/`data-toast-type` no `<body>`; `site.js` dispara o `Swal.fire` (toast no canto superior direito, 3s) na carga da página seguinte ao redirect.
+- `dotnet build` no portal: 0 erros/avisos (compila as Razor Views também).
+- Ainda não testado visualmente em navegador nem publicado — pendente de deploy.
+
 Este arquivo deve continuar sendo atualizado a cada etapa relevante do desenvolvimento.

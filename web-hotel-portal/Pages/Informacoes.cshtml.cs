@@ -28,8 +28,24 @@ public class InformacoesModel(ApiClient api) : PageModel
         }
 
         var request = new CreateHotelInfoSectionRequest(Input.Title, Input.Icon, Input.Content, Input.SortOrder);
-        await api.CreateInfoSectionAsync(User.GetJwt()!, User.GetHotelId(), request);
+        var ok = await api.CreateInfoSectionAsync(User.GetJwt()!, User.GetHotelId(), request);
+        this.SetToast(ok, "Seção criada com sucesso!", "Não foi possível criar a seção.");
 
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string title, string icon, string content, int sortOrder, bool isActive)
+    {
+        var request = new UpdateHotelInfoSectionRequest(title, icon, content, sortOrder, isActive);
+        var ok = await api.UpdateInfoSectionAsync(User.GetJwt()!, User.GetHotelId(), id, request);
+        this.SetToast(ok, "Seção atualizada com sucesso!", "Não foi possível salvar as alterações.");
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+    {
+        var ok = await api.DeleteInfoSectionAsync(User.GetJwt()!, User.GetHotelId(), id);
+        this.SetToast(ok, "Seção excluída.", "Não foi possível excluir a seção.");
         return RedirectToPage();
     }
 

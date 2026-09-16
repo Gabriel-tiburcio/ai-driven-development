@@ -49,6 +49,50 @@ else
                 <span class="docket-card-category">@r.CuisineType</span>
                 <h3>@r.Name</h3>
                 <p class="docket-card-meta">@r.Hours</p>
+                <div class="card-actions">
+                    <button type="button" class="btn secondary" data-modal-target="edit-@r.Id">Editar</button>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@r.Id"
+                          class="js-confirm-delete" data-confirm-message="Excluir o restaurante @r.Name?">
+                        <button type="submit" class="danger">Excluir</button>
+                    </form>
+                </div>
+
+                <dialog id="edit-@r.Id" class="modal">
+                    <h3>Editar restaurante</h3>
+                    <form method="post" asp-page-handler="Edit" asp-route-id="@r.Id">
+                        <div class="field">
+                            <label>Nome</label>
+                            <input name="name" value="@r.Name" required />
+                        </div>
+                        <div class="field">
+                            <label>Tipo de cozinha</label>
+                            <input name="cuisineType" value="@r.CuisineType" required />
+                        </div>
+                        <div class="field">
+                            <label>Horário de funcionamento</label>
+                            <input name="hours" value="@r.Hours" required />
+                        </div>
+                        <div class="field">
+                            <label>Descrição</label>
+                            <textarea name="description" required>@r.Description</textarea>
+                        </div>
+                        <div class="field">
+                            <label>Destaques do cardápio (um por linha)</label>
+                            <textarea name="menuHighlights">@string.Join("\n", r.MenuHighlights)</textarea>
+                        </div>
+                        <div class="field">
+                            <label>Status</label>
+                            <select name="isActive">
+                                <option value="true" selected="@r.IsActive">Ativo</option>
+                                <option value="false" selected="@(!r.IsActive)">Inativo</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn secondary" data-modal-close>Cancelar</button>
+                            <button type="submit">Salvar alterações</button>
+                        </div>
+                    </form>
+                </dialog>
             </div>
         }
     </div>

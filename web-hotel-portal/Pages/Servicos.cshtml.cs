@@ -38,8 +38,24 @@ public class ServicosModel(ApiClient api) : PageModel
             Input.DurationMinutes,
             null);
 
-        await api.CreateServiceAsync(User.GetJwt()!, User.GetHotelId(), request);
+        var ok = await api.CreateServiceAsync(User.GetJwt()!, User.GetHotelId(), request);
+        this.SetToast(ok, "Serviço criado com sucesso!", "Não foi possível criar o serviço.");
 
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string description, string category, decimal price, int durationMinutes, bool isActive)
+    {
+        var request = new UpdateServiceItemRequest(name, description, category, price, durationMinutes, null, isActive);
+        var ok = await api.UpdateServiceAsync(User.GetJwt()!, User.GetHotelId(), id, request);
+        this.SetToast(ok, "Serviço atualizado com sucesso!", "Não foi possível salvar as alterações.");
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+    {
+        var ok = await api.DeleteServiceAsync(User.GetJwt()!, User.GetHotelId(), id);
+        this.SetToast(ok, "Serviço excluído.", "Não foi possível excluir o serviço.");
         return RedirectToPage();
     }
 

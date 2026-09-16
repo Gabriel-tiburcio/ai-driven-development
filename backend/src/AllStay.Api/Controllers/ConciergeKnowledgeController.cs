@@ -29,6 +29,14 @@ public class ConciergeKnowledgeController(IConciergeKnowledgeService conciergeKn
         return Ok(created);
     }
 
+    [HttpPut("{entryId:guid}")]
+    public async Task<ActionResult<ConciergeKnowledgeEntryDto>> Update(Guid hotelId, Guid entryId, UpdateConciergeKnowledgeEntryRequest request, CancellationToken ct)
+    {
+        if (!TryAuthorizeForHotel(hotelId, out var forbid)) return forbid!;
+        var updated = await conciergeKnowledgeService.UpdateAsync(hotelId, entryId, request, ct);
+        return updated is null ? NotFound() : Ok(updated);
+    }
+
     [HttpDelete("{entryId:guid}")]
     public async Task<IActionResult> Delete(Guid hotelId, Guid entryId, CancellationToken ct)
     {

@@ -56,6 +56,54 @@ else
                     <span>@evt.EventDate.ToString("dd/MM/yyyy") às @evt.StartTime.ToString("HH:mm")</span>
                     <span>@evt.Location</span>
                 </div>
+                <div class="card-actions">
+                    <button type="button" class="btn secondary" data-modal-target="edit-@evt.Id">Editar</button>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@evt.Id"
+                          class="js-confirm-delete" data-confirm-message="Excluir o evento @evt.Name?">
+                        <button type="submit" class="danger">Excluir</button>
+                    </form>
+                </div>
+
+                <dialog id="edit-@evt.Id" class="modal">
+                    <h3>Editar evento</h3>
+                    <form method="post" asp-page-handler="Edit" asp-route-id="@evt.Id">
+                        <div class="field">
+                            <label>Nome</label>
+                            <input name="name" value="@evt.Name" required />
+                        </div>
+                        <div class="field">
+                            <label>Categoria</label>
+                            <input name="category" value="@evt.Category" required />
+                        </div>
+                        <div class="field">
+                            <label>Descrição</label>
+                            <textarea name="description">@evt.Description</textarea>
+                        </div>
+                        <div class="field">
+                            <label>Data</label>
+                            <input name="eventDate" type="date" value="@evt.EventDate.ToString("yyyy-MM-dd")" required />
+                        </div>
+                        <div class="field">
+                            <label>Horário</label>
+                            <input name="startTime" type="time" value="@evt.StartTime.ToString("HH:mm")" required />
+                        </div>
+                        <div class="field">
+                            <label>Local</label>
+                            <input name="location" value="@evt.Location" required />
+                        </div>
+                        <div class="field">
+                            <label>Status</label>
+                            <select name="isActive">
+                                <option value="true" selected="@evt.IsActive">Ativo</option>
+                                <option value="false" selected="@(!evt.IsActive)">Inativo</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn secondary" data-modal-close>Cancelar</button>
+                            <button type="submit">Salvar alterações</button>
+                        </div>
+                    </form>
+                </dialog>
             </div>
         }
     </div>

@@ -36,8 +36,33 @@ public class EventosModel(ApiClient api) : PageModel
             Input.Location,
             null);
 
-        await api.CreateEventAsync(User.GetJwt()!, User.GetHotelId(), request);
+        var ok = await api.CreateEventAsync(User.GetJwt()!, User.GetHotelId(), request);
+        this.SetToast(ok, "Evento criado com sucesso!", "Não foi possível criar o evento.");
 
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string category, string? description, DateOnly eventDate, TimeOnly startTime, string location, bool isActive)
+    {
+        var request = new UpdateEventRequest(
+            name,
+            string.IsNullOrWhiteSpace(description) ? null : description,
+            category,
+            eventDate,
+            startTime,
+            location,
+            null,
+            isActive);
+
+        var ok = await api.UpdateEventAsync(User.GetJwt()!, User.GetHotelId(), id, request);
+        this.SetToast(ok, "Evento atualizado com sucesso!", "Não foi possível salvar as alterações.");
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+    {
+        var ok = await api.DeleteEventAsync(User.GetJwt()!, User.GetHotelId(), id);
+        this.SetToast(ok, "Evento excluído.", "Não foi possível excluir o evento.");
         return RedirectToPage();
     }
 

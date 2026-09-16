@@ -44,6 +44,46 @@ else
             <div class="docket-card">
                 <span class="docket-card-category">@s.Icon @s.Title</span>
                 <p>@s.Content</p>
+                <div class="card-actions">
+                    <button type="button" class="btn secondary" data-modal-target="edit-@s.Id">Editar</button>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@s.Id"
+                          class="js-confirm-delete" data-confirm-message="Excluir a seção &quot;@s.Title&quot;?">
+                        <button type="submit" class="danger">Excluir</button>
+                    </form>
+                </div>
+
+                <dialog id="edit-@s.Id" class="modal">
+                    <h3>Editar seção</h3>
+                    <form method="post" asp-page-handler="Edit" asp-route-id="@s.Id">
+                        <div class="field">
+                            <label>Título</label>
+                            <input name="title" value="@s.Title" required />
+                        </div>
+                        <div class="field">
+                            <label>Ícone (emoji)</label>
+                            <input name="icon" value="@s.Icon" required />
+                        </div>
+                        <div class="field">
+                            <label>Conteúdo</label>
+                            <textarea name="content" required>@s.Content</textarea>
+                        </div>
+                        <div class="field">
+                            <label>Ordem de exibição</label>
+                            <input name="sortOrder" type="number" value="@s.SortOrder" />
+                        </div>
+                        <div class="field">
+                            <label>Status</label>
+                            <select name="isActive">
+                                <option value="true" selected="@s.IsActive">Ativa</option>
+                                <option value="false" selected="@(!s.IsActive)">Inativa</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn secondary" data-modal-close>Cancelar</button>
+                            <button type="submit">Salvar alterações</button>
+                        </div>
+                    </form>
+                </dialog>
             </div>
         }
     </div>

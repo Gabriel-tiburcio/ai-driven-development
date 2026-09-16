@@ -38,8 +38,32 @@ public class RecreacaoInfantilModel(ApiClient api) : PageModel
             Input.Location,
             null);
 
-        await api.CreateKidsActivityAsync(User.GetJwt()!, User.GetHotelId(), request);
+        var ok = await api.CreateKidsActivityAsync(User.GetJwt()!, User.GetHotelId(), request);
+        this.SetToast(ok, "Atividade criada com sucesso!", "Não foi possível criar a atividade.");
 
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string? description, string ageRange, string schedule, string location, bool isActive)
+    {
+        var request = new UpdateKidsActivityRequest(
+            name,
+            string.IsNullOrWhiteSpace(description) ? null : description,
+            ageRange,
+            schedule,
+            location,
+            null,
+            isActive);
+
+        var ok = await api.UpdateKidsActivityAsync(User.GetJwt()!, User.GetHotelId(), id, request);
+        this.SetToast(ok, "Atividade atualizada com sucesso!", "Não foi possível salvar as alterações.");
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+    {
+        var ok = await api.DeleteKidsActivityAsync(User.GetJwt()!, User.GetHotelId(), id);
+        this.SetToast(ok, "Atividade excluída.", "Não foi possível excluir a atividade.");
         return RedirectToPage();
     }
 

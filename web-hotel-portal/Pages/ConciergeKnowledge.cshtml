@@ -40,6 +40,31 @@ else
                 <div class="docket-card-meta">
                     <span>@entry.CreatedAt.ToLocalTime().ToString("dd/MM HH:mm")</span>
                 </div>
+                <div class="card-actions">
+                    <button type="button" class="btn secondary" data-modal-target="edit-@entry.Id">Editar</button>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@entry.Id"
+                          class="js-confirm-delete" data-confirm-message="Excluir a nota &quot;@entry.Title&quot;?">
+                        <button type="submit" class="danger">Excluir</button>
+                    </form>
+                </div>
+
+                <dialog id="edit-@entry.Id" class="modal">
+                    <h3>Editar nota</h3>
+                    <form method="post" asp-page-handler="Edit" asp-route-id="@entry.Id">
+                        <div class="field">
+                            <label>Título</label>
+                            <input name="title" value="@entry.Title" required />
+                        </div>
+                        <div class="field">
+                            <label>Conteúdo</label>
+                            <textarea name="content" required>@entry.Content</textarea>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn secondary" data-modal-close>Cancelar</button>
+                            <button type="submit">Salvar alterações</button>
+                        </div>
+                    </form>
+                </dialog>
             </div>
         }
     </div>

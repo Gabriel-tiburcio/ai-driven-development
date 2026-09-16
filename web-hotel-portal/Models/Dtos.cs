@@ -26,6 +26,7 @@ public record ActivityDto(
     List<ActivitySlotDto> Slots);
 
 public record CreateActivityRequest(string Name, string? Description, string Category, decimal Price, int DurationMinutes, string? ImageUrl);
+public record UpdateActivityRequest(string Name, string? Description, string Category, decimal Price, int DurationMinutes, string? ImageUrl, bool IsActive);
 public record CreateActivitySlotRequest(DateTimeOffset StartTime, int Capacity);
 
 public record ReservationDto(
@@ -49,6 +50,7 @@ public record LeadDto(Guid Id, string HotelName, string ContactName, string Emai
 
 public record HotelInfoSectionDto(Guid Id, Guid HotelId, string Title, string Icon, string Content, int SortOrder, bool IsActive);
 public record CreateHotelInfoSectionRequest(string Title, string Icon, string Content, int SortOrder);
+public record UpdateHotelInfoSectionRequest(string Title, string Icon, string Content, int SortOrder, bool IsActive);
 
 public record EventDto(
     Guid Id,
@@ -63,6 +65,7 @@ public record EventDto(
     bool IsActive);
 
 public record CreateEventRequest(string Name, string? Description, string Category, DateOnly EventDate, TimeOnly StartTime, string Location, string? ImageUrl);
+public record UpdateEventRequest(string Name, string? Description, string Category, DateOnly EventDate, TimeOnly StartTime, string Location, string? ImageUrl, bool IsActive);
 
 public record GuestRequestDto(
     Guid Id,
@@ -88,6 +91,7 @@ public record KidsActivityDto(
     bool IsActive);
 
 public record CreateKidsActivityRequest(string Name, string? Description, string AgeRange, string Schedule, string Location, string? ImageUrl);
+public record UpdateKidsActivityRequest(string Name, string? Description, string AgeRange, string Schedule, string Location, string? ImageUrl, bool IsActive);
 
 public record KidsEnrollmentDto(
     Guid Id,
@@ -112,6 +116,7 @@ public record RestaurantDto(
     bool IsActive);
 
 public record CreateRestaurantRequest(string Name, string Description, string CuisineType, string Hours, string? ImageUrl, List<string> MenuHighlights);
+public record UpdateRestaurantRequest(string Name, string Description, string CuisineType, string Hours, string? ImageUrl, List<string> MenuHighlights, bool IsActive);
 
 public record ServiceDto(
     Guid Id,
@@ -125,6 +130,7 @@ public record ServiceDto(
     bool IsActive);
 
 public record CreateServiceItemRequest(string Name, string Description, string Category, decimal Price, int DurationMinutes, string? ImageUrl);
+public record UpdateServiceItemRequest(string Name, string Description, string Category, decimal Price, int DurationMinutes, string? ImageUrl, bool IsActive);
 
 public record ServiceRequestDto(
     Guid Id,
@@ -148,6 +154,7 @@ public record ExternalExperienceDto(
     bool IsActive);
 
 public record CreateExternalExperienceRequest(string Name, string Description, string Category, decimal Price, string DurationLabel, string Location, string? ImageUrl);
+public record UpdateExternalExperienceRequest(string Name, string Description, string Category, decimal Price, string DurationLabel, string Location, string? ImageUrl, bool IsActive);
 
 public record ExperienceRequestDto(
     Guid Id,
@@ -160,3 +167,4 @@ public record ExperienceRequestDto(
 
 public record ConciergeKnowledgeEntryDto(Guid Id, Guid HotelId, string Title, string Content, DateTimeOffset CreatedAt);
 public record CreateConciergeKnowledgeEntryRequest(string Title, string Content);
+public record UpdateConciergeKnowledgeEntryRequest(string Title, string Content);

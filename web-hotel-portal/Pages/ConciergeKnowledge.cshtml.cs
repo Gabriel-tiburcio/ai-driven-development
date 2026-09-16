@@ -27,11 +27,26 @@ public class ConciergeKnowledgeModel(ApiClient api) : PageModel
             return Page();
         }
 
-        await api.CreateConciergeKnowledgeAsync(
+        var ok = await api.CreateConciergeKnowledgeAsync(
             User.GetJwt()!,
             User.GetHotelId(),
             new CreateConciergeKnowledgeEntryRequest(Input.Title, Input.Content));
+        this.SetToast(ok, "Nota criada com sucesso!", "Não foi possível criar a nota.");
 
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string title, string content)
+    {
+        var ok = await api.UpdateConciergeKnowledgeAsync(User.GetJwt()!, User.GetHotelId(), id, new UpdateConciergeKnowledgeEntryRequest(title, content));
+        this.SetToast(ok, "Nota atualizada com sucesso!", "Não foi possível salvar as alterações.");
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+    {
+        var ok = await api.DeleteConciergeKnowledgeAsync(User.GetJwt()!, User.GetHotelId(), id);
+        this.SetToast(ok, "Nota excluída.", "Não foi possível excluir a nota.");
         return RedirectToPage();
     }
 

@@ -52,6 +52,15 @@ public class ApiClient(IHttpClientFactory httpClientFactory, IConfiguration conf
         return response.IsSuccessStatusCode;
     }
 
+    public async Task<bool> UpdateActivityAsync(string jwt, Guid hotelId, Guid activityId, UpdateActivityRequest request, CancellationToken ct = default)
+    {
+        var response = await AuthorizedClient(jwt).PutAsJsonAsync($"/api/hotels/{hotelId}/activities/{activityId}", request, JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteActivityAsync(string jwt, Guid hotelId, Guid activityId, CancellationToken ct = default)
+        => (await AuthorizedClient(jwt).DeleteAsync($"/api/hotels/{hotelId}/activities/{activityId}", ct)).IsSuccessStatusCode;
+
     public async Task<bool> AddSlotAsync(string jwt, Guid hotelId, Guid activityId, CreateActivitySlotRequest request, CancellationToken ct = default)
     {
         var response = await AuthorizedClient(jwt).PostAsJsonAsync($"/api/hotels/{hotelId}/activities/{activityId}/slots", request, JsonOptions, ct);
@@ -115,6 +124,15 @@ public class ApiClient(IHttpClientFactory httpClientFactory, IConfiguration conf
         return response.IsSuccessStatusCode;
     }
 
+    public async Task<bool> UpdateInfoSectionAsync(string jwt, Guid hotelId, Guid sectionId, UpdateHotelInfoSectionRequest request, CancellationToken ct = default)
+    {
+        var response = await AuthorizedClient(jwt).PutAsJsonAsync($"/api/hotels/{hotelId}/info-sections/{sectionId}", request, JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteInfoSectionAsync(string jwt, Guid hotelId, Guid sectionId, CancellationToken ct = default)
+        => (await AuthorizedClient(jwt).DeleteAsync($"/api/hotels/{hotelId}/info-sections/{sectionId}", ct)).IsSuccessStatusCode;
+
     public async Task<List<EventDto>> GetEventsAsync(Guid hotelId, CancellationToken ct = default)
         => await Client.GetFromJsonAsync<List<EventDto>>($"/api/hotels/{hotelId}/events", JsonOptions, ct) ?? [];
 
@@ -123,6 +141,15 @@ public class ApiClient(IHttpClientFactory httpClientFactory, IConfiguration conf
         var response = await AuthorizedClient(jwt).PostAsJsonAsync($"/api/hotels/{hotelId}/events", request, JsonOptions, ct);
         return response.IsSuccessStatusCode;
     }
+
+    public async Task<bool> UpdateEventAsync(string jwt, Guid hotelId, Guid eventId, UpdateEventRequest request, CancellationToken ct = default)
+    {
+        var response = await AuthorizedClient(jwt).PutAsJsonAsync($"/api/hotels/{hotelId}/events/{eventId}", request, JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteEventAsync(string jwt, Guid hotelId, Guid eventId, CancellationToken ct = default)
+        => (await AuthorizedClient(jwt).DeleteAsync($"/api/hotels/{hotelId}/events/{eventId}", ct)).IsSuccessStatusCode;
 
     public async Task<List<GuestRequestDto>> GetGuestRequestsAsync(string jwt, Guid hotelId, CancellationToken ct = default)
         => await AuthorizedClient(jwt).GetFromJsonAsync<List<GuestRequestDto>>($"/api/hotels/{hotelId}/requests", JsonOptions, ct) ?? [];
@@ -142,6 +169,15 @@ public class ApiClient(IHttpClientFactory httpClientFactory, IConfiguration conf
         return response.IsSuccessStatusCode;
     }
 
+    public async Task<bool> UpdateKidsActivityAsync(string jwt, Guid hotelId, Guid kidsActivityId, UpdateKidsActivityRequest request, CancellationToken ct = default)
+    {
+        var response = await AuthorizedClient(jwt).PutAsJsonAsync($"/api/hotels/{hotelId}/kids-activities/{kidsActivityId}", request, JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteKidsActivityAsync(string jwt, Guid hotelId, Guid kidsActivityId, CancellationToken ct = default)
+        => (await AuthorizedClient(jwt).DeleteAsync($"/api/hotels/{hotelId}/kids-activities/{kidsActivityId}", ct)).IsSuccessStatusCode;
+
     public async Task<List<KidsEnrollmentDto>> GetKidsEnrollmentsAsync(string jwt, Guid hotelId, CancellationToken ct = default)
         => await AuthorizedClient(jwt).GetFromJsonAsync<List<KidsEnrollmentDto>>($"/api/hotels/{hotelId}/kids-activities/enrollments", JsonOptions, ct) ?? [];
 
@@ -154,6 +190,15 @@ public class ApiClient(IHttpClientFactory httpClientFactory, IConfiguration conf
         return response.IsSuccessStatusCode;
     }
 
+    public async Task<bool> UpdateRestaurantAsync(string jwt, Guid hotelId, Guid restaurantId, UpdateRestaurantRequest request, CancellationToken ct = default)
+    {
+        var response = await AuthorizedClient(jwt).PutAsJsonAsync($"/api/hotels/{hotelId}/restaurants/{restaurantId}", request, JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteRestaurantAsync(string jwt, Guid hotelId, Guid restaurantId, CancellationToken ct = default)
+        => (await AuthorizedClient(jwt).DeleteAsync($"/api/hotels/{hotelId}/restaurants/{restaurantId}", ct)).IsSuccessStatusCode;
+
     public async Task<List<ServiceDto>> GetServicesAsync(Guid hotelId, CancellationToken ct = default)
         => await Client.GetFromJsonAsync<List<ServiceDto>>($"/api/hotels/{hotelId}/services", JsonOptions, ct) ?? [];
 
@@ -162,6 +207,15 @@ public class ApiClient(IHttpClientFactory httpClientFactory, IConfiguration conf
         var response = await AuthorizedClient(jwt).PostAsJsonAsync($"/api/hotels/{hotelId}/services", request, JsonOptions, ct);
         return response.IsSuccessStatusCode;
     }
+
+    public async Task<bool> UpdateServiceAsync(string jwt, Guid hotelId, Guid serviceId, UpdateServiceItemRequest request, CancellationToken ct = default)
+    {
+        var response = await AuthorizedClient(jwt).PutAsJsonAsync($"/api/hotels/{hotelId}/services/{serviceId}", request, JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteServiceAsync(string jwt, Guid hotelId, Guid serviceId, CancellationToken ct = default)
+        => (await AuthorizedClient(jwt).DeleteAsync($"/api/hotels/{hotelId}/services/{serviceId}", ct)).IsSuccessStatusCode;
 
     public async Task<List<ServiceRequestDto>> GetServiceRequestsAsync(string jwt, Guid hotelId, CancellationToken ct = default)
         => await AuthorizedClient(jwt).GetFromJsonAsync<List<ServiceRequestDto>>($"/api/hotels/{hotelId}/services/requests", JsonOptions, ct) ?? [];
@@ -175,6 +229,15 @@ public class ApiClient(IHttpClientFactory httpClientFactory, IConfiguration conf
         return response.IsSuccessStatusCode;
     }
 
+    public async Task<bool> UpdateExternalExperienceAsync(string jwt, Guid hotelId, Guid experienceId, UpdateExternalExperienceRequest request, CancellationToken ct = default)
+    {
+        var response = await AuthorizedClient(jwt).PutAsJsonAsync($"/api/hotels/{hotelId}/external-experiences/{experienceId}", request, JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteExternalExperienceAsync(string jwt, Guid hotelId, Guid experienceId, CancellationToken ct = default)
+        => (await AuthorizedClient(jwt).DeleteAsync($"/api/hotels/{hotelId}/external-experiences/{experienceId}", ct)).IsSuccessStatusCode;
+
     public async Task<List<ExperienceRequestDto>> GetExperienceRequestsAsync(string jwt, Guid hotelId, CancellationToken ct = default)
         => await AuthorizedClient(jwt).GetFromJsonAsync<List<ExperienceRequestDto>>($"/api/hotels/{hotelId}/external-experiences/requests", JsonOptions, ct) ?? [];
 
@@ -186,4 +249,13 @@ public class ApiClient(IHttpClientFactory httpClientFactory, IConfiguration conf
         var response = await AuthorizedClient(jwt).PostAsJsonAsync($"/api/hotels/{hotelId}/concierge-knowledge", request, JsonOptions, ct);
         return response.IsSuccessStatusCode;
     }
+
+    public async Task<bool> UpdateConciergeKnowledgeAsync(string jwt, Guid hotelId, Guid entryId, UpdateConciergeKnowledgeEntryRequest request, CancellationToken ct = default)
+    {
+        var response = await AuthorizedClient(jwt).PutAsJsonAsync($"/api/hotels/{hotelId}/concierge-knowledge/{entryId}", request, JsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteConciergeKnowledgeAsync(string jwt, Guid hotelId, Guid entryId, CancellationToken ct = default)
+        => (await AuthorizedClient(jwt).DeleteAsync($"/api/hotels/{hotelId}/concierge-knowledge/{entryId}", ct)).IsSuccessStatusCode;
 }

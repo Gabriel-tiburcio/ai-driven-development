@@ -49,6 +49,50 @@ else
                 <span class="docket-card-category">@k.AgeRange</span>
                 <h3>@k.Name</h3>
                 <p class="docket-card-meta">@k.Schedule &middot; @k.Location</p>
+                <div class="card-actions">
+                    <button type="button" class="btn secondary" data-modal-target="edit-@k.Id">Editar</button>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@k.Id"
+                          class="js-confirm-delete" data-confirm-message="Excluir a atividade @k.Name?">
+                        <button type="submit" class="danger">Excluir</button>
+                    </form>
+                </div>
+
+                <dialog id="edit-@k.Id" class="modal">
+                    <h3>Editar atividade</h3>
+                    <form method="post" asp-page-handler="Edit" asp-route-id="@k.Id">
+                        <div class="field">
+                            <label>Nome</label>
+                            <input name="name" value="@k.Name" required />
+                        </div>
+                        <div class="field">
+                            <label>Faixa etária</label>
+                            <input name="ageRange" value="@k.AgeRange" required />
+                        </div>
+                        <div class="field">
+                            <label>Horário</label>
+                            <input name="schedule" value="@k.Schedule" required />
+                        </div>
+                        <div class="field">
+                            <label>Local</label>
+                            <input name="location" value="@k.Location" required />
+                        </div>
+                        <div class="field">
+                            <label>Descrição</label>
+                            <textarea name="description">@k.Description</textarea>
+                        </div>
+                        <div class="field">
+                            <label>Status</label>
+                            <select name="isActive">
+                                <option value="true" selected="@k.IsActive">Ativa</option>
+                                <option value="false" selected="@(!k.IsActive)">Inativa</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn secondary" data-modal-close>Cancelar</button>
+                            <button type="submit">Salvar alterações</button>
+                        </div>
+                    </form>
+                </dialog>
             </div>
         }
     </div>

@@ -52,6 +52,50 @@ else
                     <span><strong>@s.Price.ToString("C")</strong></span>
                     <span>@s.DurationMinutes min</span>
                 </div>
+                <div class="card-actions">
+                    <button type="button" class="btn secondary" data-modal-target="edit-@s.Id">Editar</button>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@s.Id"
+                          class="js-confirm-delete" data-confirm-message="Excluir o serviço @s.Name?">
+                        <button type="submit" class="danger">Excluir</button>
+                    </form>
+                </div>
+
+                <dialog id="edit-@s.Id" class="modal">
+                    <h3>Editar serviço</h3>
+                    <form method="post" asp-page-handler="Edit" asp-route-id="@s.Id">
+                        <div class="field">
+                            <label>Nome</label>
+                            <input name="name" value="@s.Name" required />
+                        </div>
+                        <div class="field">
+                            <label>Categoria</label>
+                            <input name="category" value="@s.Category" required />
+                        </div>
+                        <div class="field">
+                            <label>Descrição</label>
+                            <textarea name="description" required>@s.Description</textarea>
+                        </div>
+                        <div class="field">
+                            <label>Preço (R$)</label>
+                            <input name="price" type="number" step="0.01" value="@s.Price" />
+                        </div>
+                        <div class="field">
+                            <label>Duração (minutos)</label>
+                            <input name="durationMinutes" type="number" value="@s.DurationMinutes" />
+                        </div>
+                        <div class="field">
+                            <label>Status</label>
+                            <select name="isActive">
+                                <option value="true" selected="@s.IsActive">Ativo</option>
+                                <option value="false" selected="@(!s.IsActive)">Inativo</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="btn secondary" data-modal-close>Cancelar</button>
+                            <button type="submit">Salvar alterações</button>
+                        </div>
+                    </form>
+                </dialog>
             </div>
         }
     </div>

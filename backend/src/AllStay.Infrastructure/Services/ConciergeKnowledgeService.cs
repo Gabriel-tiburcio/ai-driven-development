@@ -32,6 +32,17 @@ public class ConciergeKnowledgeService(AllStayDbContext db) : IConciergeKnowledg
         return ToDto(entry);
     }
 
+    public async Task<ConciergeKnowledgeEntryDto?> UpdateAsync(Guid hotelId, Guid entryId, UpdateConciergeKnowledgeEntryRequest request, CancellationToken ct = default)
+    {
+        var entry = await db.ConciergeKnowledgeEntries.FirstOrDefaultAsync(e => e.HotelId == hotelId && e.Id == entryId, ct);
+        if (entry is null) return null;
+
+        entry.Title = request.Title;
+        entry.Content = request.Content;
+        await db.SaveChangesAsync(ct);
+        return ToDto(entry);
+    }
+
     public async Task<bool> DeleteAsync(Guid hotelId, Guid entryId, CancellationToken ct = default)
     {
         var entry = await db.ConciergeKnowledgeEntries.FirstOrDefaultAsync(e => e.HotelId == hotelId && e.Id == entryId, ct);
