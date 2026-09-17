@@ -6,12 +6,12 @@ Este repositório também é o entregável de um TCC de MBA (FIAP) — os docume
 
 ## Módulos do POC
 
-Todos os 9 módulos abaixo estão implementados ponta a ponta (backend + admin no `web-hotel-portal` + `app-guest`), com uma exceção deliberada: o chat do Concierge Premium continua sendo uma prévia visual (mock), sem IA funcional — só a área de backoffice para "treinar" o agente é real.
+Todos os 9 módulos abaixo estão implementados ponta a ponta (backend + admin no `web-hotel-portal` + `app-guest`). O **Concierge Premium** tem IA real: o chat do hóspede conversa de verdade com um LLM (DeepSeek), usando o conteúdo cadastrado pelo hotel (`ConciergeKnowledgeEntry`) como contexto — RAG simples por *context stuffing*, sem vetorização.
 
 | # | Módulo | Guest (`app-guest`) | Admin (`web-hotel-portal`) |
 |---|---|---|---|
 | 1 | Restaurante | `Restaurante` / `RestauranteDetail` | `Restaurante` |
-| 2 | Concierge Premium | `Concierge` (mock) | `ConciergeKnowledge` |
+| 2 | Concierge Premium | `Concierge` (chat com IA real) | `ConciergeKnowledge` |
 | 3 | Informações | `Informacoes` | `Informacoes` |
 | 4 | Eventos | `Eventos` / `EventoDetail` | `Eventos` |
 | 5 | Atividades | `Catalog` (`/atividades`) / `ActivityDetail` / `MyReservations` | `Activities` / `ActivityDetail` / `Reservations` |
@@ -24,7 +24,7 @@ Detalhes de escopo, usuários e princípios de produto em [`PRODUCT.md`](./PRODU
 
 ## Estrutura do repositório
 
-- **`backend/`** — API ASP.NET Core (.NET 8/9), Clean Architecture (`Domain` / `Application` / `Infrastructure` / `Api`). SQL Server, EF Core, JWT para staff.
+- **`backend/`** — API ASP.NET Core (.NET 8/9), Clean Architecture (`Domain` / `Application` / `Infrastructure` / `Api`). SQL Server, EF Core, JWT para staff, integração com a DeepSeek para o Concierge Premium.
 - **`app-guest/`** — PWA do hóspede (React + TypeScript + Vite + React Router). Acesso via `/h/<código-do-hotel>`, sem login.
 - **`web-hotel-portal/`** — painel administrativo da equipe do hotel (ASP.NET Core Razor Pages).
 - **`web-institutional/`** — site institucional B2B (ASP.NET Core Razor Pages).

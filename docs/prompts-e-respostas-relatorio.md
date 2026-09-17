@@ -117,8 +117,75 @@ Documento de evidência para a Prova Substitutiva (Modalidade B — Projeto Prá
 - Escolha de não usar streaming na resposta do chat, priorizando simplicidade.
 - Decisão de não commitar a chave de API real no repositório (mesmo havendo outros segredos em texto plano no projeto, optei por não repetir esse padrão para uma chave nova).
 
-## Próximos passos
+### Prompt 15 — Troca de provedor de IA (Anthropic → Gemini)
+**Eu:** "Consegui uma chave gratuita do Google Gemini. Pode trocar o provedor de IA do Concierge da Anthropic para o Gemini?"
 
-- Criar a chave de API em console.anthropic.com e preencher `Anthropic:ApiKey`.
-- Testar o chat de ponta a ponta localmente.
-- Gravar o vídeo de demonstração (até 10 min) e finalizar o relatório técnico da prova.
+**IA:** Confirmou o objetivo antes de agir (avisando sobre o risco de ter compartilhado a chave em texto no chat) e reescreveu a integração: `AnthropicOptions` → `GeminiOptions`, `ConciergeChatService` adaptado para o formato de requisição/resposta do endpoint `generateContent` do Gemini. Sugeriu inicialmente guardar a chave via `dotnet user-secrets` (mais seguro que texto plano); segui o padrão já usado no resto do projeto e pedi para manter em `appsettings.json` mesmo, o que a IA aplicou.
+
+---
+
+### Prompt 16 — Recomendações dinâmicas de restaurantes e passeios
+**Eu:** "O Concierge também deveria conseguir recomendar restaurantes e passeios nas proximidades do hotel, não só responder com o que está cadastrado. Dá pra fazer isso de forma dinâmica?"
+
+**IA:** Apresentou duas opções: usar o *grounding* com busca do Google, nativo da API do Gemini (mais rápido de implementar), ou integrar a Google Places API manualmente (mais controle sobre os dados, mais trabalho). Optei pela primeira. A IA habilitou a ferramenta de busca na chamada do Gemini e ajustou o prompt para priorizar o conteúdo cadastrado pelo hotel e nunca inventar lugares.
+
+---
+
+### Prompt 17 — Localização do hotel de ponta a ponta
+**Eu:** "Quero incluir o endereço/cidade do hotel nesse fluxo. Revise como o hotel é cadastrado hoje para essa informação chegar desde o cadastro até o momento em que o hóspede usa o Concierge."
+
+**IA:** Investigou o fluxo de cadastro de hotel antes de implementar e descobriu que **não existia nenhuma forma de editar um hotel já cadastrado** (só criar e ativar/desativar). Implementou a funcionalidade completa: campos de endereço/cidade na entidade, migration de banco, endpoint de atualização, tela de edição no painel admin (cobrindo hotéis já existentes), e a informação sendo injetada no prompt do Concierge para orientar as recomendações externas.
+
+---
+
+### Prompt 18 — Teste em produção e troubleshooting
+**Eu:** "Acabei de publicar em produção, poderia testar?"
+
+**IA:** Testou via terminal e navegador, e diagnosticou em sequência três problemas reais do ambiente de produção, não do código em si: uma migration de banco que nunca tinha sido aplicada (migrations só rodam automaticamente em ambiente de desenvolvimento), uma transação de banco deixada aberta por engano numa ferramenta externa (bloqueando consultas), e um erro de permissão (403) da API do Gemini no projeto Google Cloud associado à chave. Para o primeiro problema, como o Claude Code bloqueia ações diretas em banco de produção via terminal, a IA gerou um script SQL seguro (idempotente) para eu rodar manualmente.
+
+---
+
+### Prompt 19 — Segunda troca de provedor (Gemini → DeepSeek)
+**Eu:** "Vamos trocar o Gemini pela DeepSeek, aqui está a chave."
+
+**IA:** Perguntou como eu queria lidar com a perda da busca ao vivo do Gemini (a DeepSeek não tem essa ferramenta nativa) — optei por manter as recomendações baseadas apenas no conhecimento geral do modelo, com aviso para nunca inventar lugares. A IA reescreveu a integração para o formato de API da DeepSeek (compatível com o padrão OpenAI) e me ajudou a diagnosticar um erro de autenticação (401) causado pela chave não estar chegando corretamente à aplicação em produção.
+
+---
+
+### Prompt 20 — Ajuste fino do comportamento do Concierge
+**Eu:** "As respostas do Concierge estão muito longas, ele fica avisando que não tem acesso à internet e manda o hóspede falar com a recepção o tempo todo. Também preciso que o app renderize a formatação em negrito/listas que o modelo está mandando."
+
+**IA:** Reescreveu o prompt de sistema para respostas curtas e objetivas, proibiu menções a limitações técnicas do modelo, e limitou a sugestão de recepção a casos sem alternativa real. Criou um pequeno renderizador de markdown no app do hóspede (sem adicionar nenhuma biblioteca nova) para exibir negrito e listas corretamente em vez de asteriscos literais.
+
+---
+
+### Prompt 21 — Botões de excluir e editar no backoffice
+**Eu:** "Testando o painel percebi que nada tem opção de excluir os itens cadastrados — dá pra incluir isso pra tudo? E também a edição, não só exclusão."
+
+**IA:** Verificou primeiro que o backend já tinha endpoints prontos para excluir e editar quase todas as entidades (só faltava a interface) — exceto as notas do Concierge, que não tinham endpoint de edição, implementado nessa mesma etapa. Adicionou botões de excluir e editar nas 8 telas do painel administrativo.
+
+---
+
+### Prompt 22 — Refinamento de UX (modal + SweetAlert2)
+**Eu:** "Gostei, mas os botões ficaram muito soltos visualmente. A edição não poderia abrir em um modal? E usa o SweetAlert para as confirmações e mensagens de sucesso/erro, em vez do alerta padrão do navegador."
+
+**IA:** Converteu os formulários de edição para modais nativos do navegador, trocou a confirmação de exclusão pelo SweetAlert2, e adicionou notificações de sucesso/erro após qualquer ação no painel (antes essas ações não avisavam se tinham realmente funcionado).
+
+---
+
+## Decisões que foram minhas, não da IA
+
+- Escolha da Modalidade B em vez da A.
+- Escolha de aproveitar o AllStay (TCC já existente) em vez de construir um projeto novo do zero.
+- Escolha de não usar streaming na resposta do chat, priorizando simplicidade.
+- Decisão de manter a chave de API em texto plano no `appsettings.json`, seguindo o mesmo padrão já usado no restante do projeto para outros segredos — inclusive depois de a IA sugerir uma alternativa mais segura (`dotnet user-secrets`).
+- Duas trocas sucessivas de provedor de IA (Anthropic → Gemini → DeepSeek), ambas motivadas por custo — não pelo erro de permissão do Gemini encontrado na mesma época, que foi um problema à parte.
+- Escolha de manter as recomendações externas do Concierge limitadas ao conhecimento geral do modelo após trocar para a DeepSeek, em vez de integrar uma API de busca separada.
+- Pedido para remover a autenticação JWT da API (por ser uma POC não divulgada) e, pouco depois, pedido para restaurá-la ao perceber que o problema original era do ambiente de teste local, não da autenticação.
+- Todos os ajustes de UX do backoffice (botões de excluir/editar, modal, SweetAlert2) nasceram de uso real do produto, não do escopo original planejado — evidência de um ciclo iterativo típico de desenvolvimento assistido por IA.
+
+## Estado final (2026-09-16)
+
+- Concierge Premium com IA real (DeepSeek), RAG por context stuffing com o conteúdo cadastrado pelo hotel, validado de ponta a ponta em produção.
+- Backoffice do hotel com CRUD completo (criar/editar/excluir) em todas as 8 telas de conteúdo, com modais e feedback visual (SweetAlert2).
+- Pendências remanescentes: gravar o vídeo de demonstração e finalizar a redação do relatório técnico da prova (este documento e `progress.md` servem de base).

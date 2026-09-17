@@ -5,28 +5,27 @@ Subdomains:
 |---|---|---|
 | Institutional website | `allstay.eupanda.com.br` | `web-institutional/bin/Release/net8.0/win-x64/publish/` |
 | Guest PWA (static) | `app.allstay.eupanda.com.br` | `app-guest/dist/` |
-| Hotel backoffice | `hotel.allstay.eupanda.com.br` | `web-backoffice/bin/Release/net8.0/win-x64/publish/` |
+| Hotel backoffice | `hotel.allstay.eupanda.com.br` | `web-hotel-portal/bin/Release/net8.0/win-x64/publish/` |
 | Backend API | `api.allstay.eupanda.com.br` | `backend/src/AllStay.Api/bin/Release/net8.0/win-x64/publish/` |
+
+*(`web-backoffice`, Blazor, is a stale duplicate — not deployed. `web-hotel-portal`, Razor Pages, is the real staff portal.)*
 
 All three .NET apps target **.NET 8 (LTS)** and publish **self-contained** (`win-x64`) — the server doesn't need the .NET runtime installed ("autosuficiente"). Originally built on .NET 9, but retargeted to 8 after hitting `HTTP 500.32 — Failed to load .NET Core host` on HostAzul, which only has the .NET 6/8 hosting bundle.
 
 **If you hit 500.32 again:** it usually means the IIS app pool is running 32-bit (`Enable 32-Bit Applications = True` in Plesk's hosting settings). A `win-x86` build of the API is pre-built at `backend/publish-x86/` — try that instead of `backend/publish/` if the 64-bit one fails.
 
-## 0) Database (one-time)
+## 0) Database (one-time, and again after every new migration)
 
-The production DB (`202_allstay` on `192.168.20.3,3533`) needs its schema created once. From a machine that can reach that host (likely has to be done on/near the HostAzul server, since it's a private IP):
+The production DB is `202_allstay` on `bd.hulk.hostazul.com.br,3533`. Migrations **do not run automatically** in Production — `Program.cs` only calls `DbSeeder.SeedAsync` (which includes `Database.MigrateAsync`) when `ASPNETCORE_ENVIRONMENT=Development`. Every time a new EF migration is added, generate and run an idempotent script manually:
 
-```
-sqlcmd -S 192.168.20.3,3533 -d 202_allstay -U 202_allstay -P <password> -i backend/deploy/InitialCreate.sql
-```
-
-Or run it through whatever DB management panel HostAzul provides (paste the contents of `backend/deploy/InitialCreate.sql`). This creates all tables but does **not** seed demo data — the seeder only runs in the `Development` environment. Create the first hotel/staff user for real either via a one-off script or by temporarily adding an admin endpoint (not included in this build — flag if you want one).
-
-If you ever add new EF migrations later, regenerate the script instead of re-running the old one:
 ```
 dotnet ef migrations script --idempotent -p src/AllStay.Infrastructure -s src/AllStay.Api -o deploy/<name>.sql
 ```
-(`--idempotent` makes it safe to re-run — it skips migrations already applied.)
+(`--idempotent` makes it safe to re-run — it skips migrations already applied, checked against `__EFMigrationsHistory`.)
+
+Run the generated `.sql` against the production DB via whatever SQL client/panel HostAzul provides (SSMS, Azure Data Studio, etc.). **Close the client's transaction/session when done** — an open uncommitted transaction on a table (even from just running a `SELECT`) blocks every query the API makes against it, surfacing as `Execution Timeout Expired` errors in the app with no obvious cause (this happened once — see `progress.md` §12).
+
+This creates/updates tables but does **not** seed demo data — the seeder only runs in `Development`. Create real hotels/staff via the admin API (see below).
 
 ## 1) Backend API → `api.allstay.eupanda.com.br`
 
@@ -39,12 +38,15 @@ Upload the contents of `src/AllStay.Api/bin/Release/net8.0/win-x64/publish/` to 
 **Set these as environment variables** on the Plesk site (Websites & Domains → api.allstay... → Environment Variables, or PHP/ASP.NET settings panel — exact location depends on your Plesk skin), or by editing `web.config` on the server after upload:
 
 ```
-ConnectionStrings__Default = Server=192.168.20.3,3533;Database=202_allstay;User Id=202_allstay;Password=<the real password>;TrustServerCertificate=True
-Jwt__SigningKey             = <a long random secret — generate a new one, don't reuse the dev one>
+ConnectionStrings__Default = Data Source=bd.hulk.hostazul.com.br,3533;Initial Catalog=202_allstay;User ID=202_allstay;Password=<the real password>;TrustServerCertificate=True
+Jwt__SigningKey             = <a long random secret — still issued at login even though the API no longer validates it, see note below>
 Admin__ApiKey               = ecdc688b06bc7c07419b8f7ac9adb55210abd1d3679a2974
+DeepSeek__ApiKey            = <DeepSeek API key — note the DOUBLE underscore; DeepSeek:ApiKey or DEEPSEEK_APIKEY will silently fail>
 ```
 
-Never commit real values for these into the repo — `appsettings.Production.json` intentionally leaves them blank. `Admin__ApiKey` above is a freshly generated value for this deploy — treat it like a password (keep it out of chat history/screenshots once you've copied it into Plesk).
+Never commit real values for these into the repo — `appsettings.Production.json` intentionally leaves the secrets blank (this project keeps them in plain text in `appsettings.json` alongside the DB password/admin key, matching an existing project convention — a deliberate, discussed trade-off for a school POC, not an oversight).
+
+⚠️ **JWT auth is a deliberate POC no-op as of 2026-09-16.** `Program.cs` still issues a JWT at staff login (so the portal session/UX is unchanged), but no longer registers `AddAuthentication/AddJwtBearer` or enforces `[Authorize]` on any staff endpoint — any `hotelId` in the URL works for any caller. Confirmed, explicit user decision, not a bug. Revisit before any real launch.
 
 Verify: `https://api.allstay.eupanda.com.br/swagger` should load, and `GET /api/hotels/by-code/<some-code>` should hit the real DB.
 
@@ -74,10 +76,10 @@ Upload `bin/Release/net8.0/win-x64/publish/` to the `allstay.eupanda.com.br` sit
 ## 3) Hotel backoffice → `hotel.allstay.eupanda.com.br`
 
 ```
-cd web-backoffice
+cd web-hotel-portal
 dotnet publish -p:PublishProfile=HostAzul
 ```
-Upload `bin/Release/net8.0/win-x64/publish/` to the `hotel.allstay.eupanda.com.br` site root. Same as above — `Api:BaseUrl` is already set, nothing secret to configure.
+Upload `bin/Release/net8.0/win-x64/publish/` to the `hotel.allstay.eupanda.com.br` site root. `Api:BaseUrl` and `Admin:ApiKey` are already set in `appsettings.Production.json` — nothing secret to configure here (the admin key used by super-admin pages is the same one set on the API above).
 
 ## 4) Guest PWA → `app.allstay.eupanda.com.br`
 
