@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
+import CategoryThumb from "../components/CategoryThumb";
 import { useGuest } from "../context/GuestContext";
 import type { ExternalExperience } from "../types";
 
@@ -26,7 +27,7 @@ export default function ExperienciaExternaDetail() {
 
   if (!hotel) return <Navigate to="/" replace />;
   if (loading) return <div className="screen center">Carregando...</div>;
-  if (!experience) return <Navigate to="/experiencias-externas" replace />;
+  if (!experience) return <Navigate to="/explorar" replace />;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +43,7 @@ export default function ExperienciaExternaDetail() {
         <div className="success-box">
           <h2>Solicitação enviada!</h2>
           <p>A recepção vai confirmar disponibilidade, horário de saída e pagamento com você.</p>
-          <button className="secondary" onClick={() => navigate("/experiencias-externas")}>
+          <button className="secondary" onClick={() => navigate("/explorar")}>
             Voltar às experiências
           </button>
         </div>
@@ -55,6 +56,10 @@ export default function ExperienciaExternaDetail() {
       <button className="link-back" onClick={() => navigate(-1)}>
         &larr; Voltar
       </button>
+
+      <div className="hero-photo">
+        <CategoryThumb imageUrl={experience.imageUrl} category={experience.category} kind="experience" />
+      </div>
 
       <h1>{experience.name}</h1>
       <span className="badge">{experience.category}</span>

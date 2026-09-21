@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
+import CategoryThumb from "../components/CategoryThumb";
 import { useGuest } from "../context/GuestContext";
 import type { Service } from "../types";
 
@@ -53,6 +54,10 @@ export default function ServicoDetail() {
       <button className="link-back" onClick={() => navigate(-1)}>
         &larr; Voltar
       </button>
+
+      <div className="hero-photo">
+        <CategoryThumb imageUrl={service.imageUrl} category={service.category} kind="service" />
+      </div>
 
       <h1>{service.name}</h1>
       <span className="badge">{service.category}</span>

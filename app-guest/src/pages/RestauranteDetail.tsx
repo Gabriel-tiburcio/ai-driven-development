@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
+import CategoryThumb from "../components/CategoryThumb";
 import { useGuest } from "../context/GuestContext";
 import type { Restaurant } from "../types";
 
@@ -30,21 +31,30 @@ export default function RestauranteDetail() {
         &larr; Voltar
       </button>
 
+      <div className="hero-photo">
+        <CategoryThumb imageUrl={restaurant.imageUrl} category={restaurant.cuisineType} kind="restaurant" />
+      </div>
+
       <h1>{restaurant.name}</h1>
-      <span className="badge">{restaurant.cuisineType}</span>
-      <p className="muted">{restaurant.hours}</p>
+      <p className="muted">
+        {restaurant.cuisineType} · {restaurant.hours}
+      </p>
       <p>{restaurant.description}</p>
 
-      <h3>Destaques do cardápio</h3>
-      <div className="card-list">
-        {restaurant.menuHighlights.map((item) => (
-          <div className="activity-card" key={item}>
-            <div className="activity-card-body">
-              <p style={{ margin: 0 }}>{item}</p>
-            </div>
+      {restaurant.menuHighlights.length > 0 && (
+        <>
+          <h3 className="section-title">Destaques do cardápio</h3>
+          <div className="card-list">
+            {restaurant.menuHighlights.map((item) => (
+              <div className="activity-card" key={item}>
+                <div className="activity-card-body">
+                  <p style={{ margin: 0 }}>{item}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 }

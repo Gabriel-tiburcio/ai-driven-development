@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { api } from "../api/client";
+import CategoryThumb from "../components/CategoryThumb";
 import { useGuest } from "../context/GuestContext";
 import type { KidsActivity } from "../types";
 
@@ -38,13 +39,15 @@ export default function RecreacaoInfantil() {
       ) : (
         <div className="card-list">
           {kidsActivities.map((k) => (
-            <Link to={`/recreacao-infantil/${k.id}`} key={k.id} className="activity-card">
-              <div className="activity-card-body">
-                <div className="activity-card-top">
-                  <span className="badge">{k.ageRange}</span>
-                </div>
+            <Link to={`/recreacao-infantil/${k.id}`} key={k.id} className="explore-row">
+              <div className="explore-row-thumb">
+                <CategoryThumb imageUrl={k.imageUrl} kind="kids" />
+              </div>
+              <div className="explore-row-body">
                 <h3>{k.name}</h3>
-                <p className="muted">{k.schedule} · {k.location}</p>
+                <p className="muted small">
+                  {k.ageRange} · {k.schedule} · {k.location}
+                </p>
               </div>
             </Link>
           ))}

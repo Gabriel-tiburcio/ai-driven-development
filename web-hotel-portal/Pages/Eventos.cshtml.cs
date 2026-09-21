@@ -34,7 +34,7 @@ public class EventosModel(ApiClient api) : PageModel
             Input.EventDate,
             Input.StartTime,
             Input.Location,
-            null);
+            string.IsNullOrWhiteSpace(Input.ImageUrl) ? null : Input.ImageUrl);
 
         var ok = await api.CreateEventAsync(User.GetJwt()!, User.GetHotelId(), request);
         this.SetToast(ok, "Evento criado com sucesso!", "Não foi possível criar o evento.");
@@ -42,7 +42,7 @@ public class EventosModel(ApiClient api) : PageModel
         return RedirectToPage();
     }
 
-    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string category, string? description, DateOnly eventDate, TimeOnly startTime, string location, bool isActive)
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string category, string? description, DateOnly eventDate, TimeOnly startTime, string location, string? imageUrl, bool isActive)
     {
         var request = new UpdateEventRequest(
             name,
@@ -51,7 +51,7 @@ public class EventosModel(ApiClient api) : PageModel
             eventDate,
             startTime,
             location,
-            null,
+            string.IsNullOrWhiteSpace(imageUrl) ? null : imageUrl,
             isActive);
 
         var ok = await api.UpdateEventAsync(User.GetJwt()!, User.GetHotelId(), id, request);
@@ -74,5 +74,6 @@ public class EventosModel(ApiClient api) : PageModel
         public DateOnly EventDate { get; set; } = DateOnly.FromDateTime(DateTime.Today);
         public TimeOnly StartTime { get; set; } = new(19, 0);
         public string Location { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; }
     }
 }

@@ -31,6 +31,10 @@
                 <label asp-for="Input.DurationMinutes">Duração (minutos)</label>
                 <input asp-for="Input.DurationMinutes" type="number" />
             </div>
+            <div class="field">
+                <label asp-for="Input.ImageUrl">URL da foto</label>
+                <input asp-for="Input.ImageUrl" type="url" placeholder="https://..." />
+            </div>
             <button type="submit">Salvar</button>
         </form>
     </details>
@@ -46,6 +50,16 @@ else
         @foreach (var s in Model.Services)
         {
             <div class="docket-card">
+                <div class="docket-card-photo">
+                    @if (!string.IsNullOrWhiteSpace(s.ImageUrl))
+                    {
+                        <img src="@s.ImageUrl" alt="" />
+                    }
+                    else
+                    {
+                        <span class="docket-card-photo-empty">Sem foto</span>
+                    }
+                </div>
                 <span class="docket-card-category">@s.Category</span>
                 <h3>@s.Name</h3>
                 <div class="docket-card-meta">
@@ -82,6 +96,10 @@ else
                         <div class="field">
                             <label>Duração (minutos)</label>
                             <input name="durationMinutes" type="number" value="@s.DurationMinutes" />
+                        </div>
+                        <div class="field">
+                            <label>URL da foto</label>
+                            <input name="imageUrl" type="url" value="@s.ImageUrl" placeholder="https://..." />
                         </div>
                         <div class="field">
                             <label>Status</label>

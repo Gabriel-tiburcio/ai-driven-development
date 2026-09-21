@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { api } from "../api/client";
+import CategoryThumb from "../components/CategoryThumb";
 import { useGuest } from "../context/GuestContext";
 import type { Service } from "../types";
 
@@ -56,14 +57,15 @@ export default function Servicos() {
       ) : (
         <div className="card-list">
           {filtered.map((s) => (
-            <Link to={`/servicos/${s.id}`} key={s.id} className="activity-card">
-              <div className="activity-card-body">
-                <div className="activity-card-top">
-                  <span className="badge">{s.category}</span>
-                </div>
+            <Link to={`/servicos/${s.id}`} key={s.id} className="explore-row">
+              <div className="explore-row-thumb">
+                <CategoryThumb imageUrl={s.imageUrl} category={s.category} kind="service" />
+              </div>
+              <div className="explore-row-body">
                 <h3>{s.name}</h3>
-                <p className="muted">{s.durationMinutes} min</p>
-                <p className="price">R$ {s.price.toFixed(2)}</p>
+                <p className="muted small">
+                  {s.category} · {s.durationMinutes} min · R$ {s.price.toFixed(2)}
+                </p>
               </div>
             </Link>
           ))}

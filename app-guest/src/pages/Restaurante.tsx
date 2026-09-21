@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { api } from "../api/client";
+import CategoryThumb from "../components/CategoryThumb";
 import { useGuest } from "../context/GuestContext";
 import type { Restaurant } from "../types";
 
 export default function Restaurante() {
   const { hotel } = useGuest();
-  const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,33 +22,26 @@ export default function Restaurante() {
 
   return (
     <div className="screen">
-      <button className="link-back" onClick={() => navigate(-1)}>
-        &larr; Voltar
-      </button>
-
       <header className="page-header">
-        <h1>Restaurante</h1>
-        <p className="subtitle">Opções de alimentação em {hotel.name}.</p>
+        <h1>Restaurantes</h1>
       </header>
 
       {loading ? (
-        <p>Carregando restaurantes...</p>
+        <p className="muted">Carregando restaurantes...</p>
       ) : restaurants.length === 0 ? (
-        <p>Nenhum restaurante disponível no momento.</p>
+        <p className="muted">Nenhum restaurante disponível no momento.</p>
       ) : (
-        <div className="card-list">
-          {restaurants.map((r) => (
-            <Link to={`/restaurante/${r.id}`} key={r.id} className="activity-card">
-              <div className="activity-card-body">
-                <div className="activity-card-top">
-                  <span className="badge">{r.cuisineType}</span>
-                </div>
-                <h3>{r.name}</h3>
-                <p className="muted">{r.hours}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        restaurants.map((r) => (
+          <Link to={`/restaurante/${r.id}`} key={r.id} className="restaurant-row">
+            <div className="hero-photo">
+              <CategoryThumb imageUrl={r.imageUrl} category={r.cuisineType} kind="restaurant" />
+            </div>
+            <h3>{r.name}</h3>
+            <p className="muted small">
+              {r.cuisineType} · {r.hours}
+            </p>
+          </Link>
+        ))
       )}
     </div>
   );

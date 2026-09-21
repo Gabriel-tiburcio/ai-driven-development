@@ -10,7 +10,7 @@
           "app-guest/src/index.css"
         ],
         "createdAt": "2026-08-15T22:05:25.875Z",
-        "reason": "user pinned apple-design skill (apple.com visual language); Inter is that skill's own documented SF-Pro substitute for web use, not a default"
+        "reason": "pre-existing design system choice (Inter documented as Apple-register substitute in index.css header), not introduced this session"
       },
       {
         "rule": "overused-font",

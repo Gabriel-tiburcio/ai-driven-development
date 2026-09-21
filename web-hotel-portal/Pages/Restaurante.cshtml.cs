@@ -36,7 +36,7 @@ public class RestauranteModel(ApiClient api) : PageModel
             Input.Description,
             Input.CuisineType,
             Input.Hours,
-            null,
+            string.IsNullOrWhiteSpace(Input.ImageUrl) ? null : Input.ImageUrl,
             menuHighlights);
 
         var ok = await api.CreateRestaurantAsync(User.GetJwt()!, User.GetHotelId(), request);
@@ -45,13 +45,13 @@ public class RestauranteModel(ApiClient api) : PageModel
         return RedirectToPage();
     }
 
-    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string description, string cuisineType, string hours, string? menuHighlights, bool isActive)
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string description, string cuisineType, string hours, string? menuHighlights, string? imageUrl, bool isActive)
     {
         var highlights = (menuHighlights ?? string.Empty)
             .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .ToList();
 
-        var request = new UpdateRestaurantRequest(name, description, cuisineType, hours, null, highlights, isActive);
+        var request = new UpdateRestaurantRequest(name, description, cuisineType, hours, string.IsNullOrWhiteSpace(imageUrl) ? null : imageUrl, highlights, isActive);
         var ok = await api.UpdateRestaurantAsync(User.GetJwt()!, User.GetHotelId(), id, request);
         this.SetToast(ok, "Restaurante atualizado com sucesso!", "Não foi possível salvar as alterações.");
         return RedirectToPage();
@@ -71,5 +71,6 @@ public class RestauranteModel(ApiClient api) : PageModel
         public string CuisineType { get; set; } = string.Empty;
         public string Hours { get; set; } = string.Empty;
         public string? MenuHighlights { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

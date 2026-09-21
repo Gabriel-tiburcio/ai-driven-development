@@ -31,6 +31,10 @@
                 <label asp-for="Input.Description">Descrição</label>
                 <textarea asp-for="Input.Description"></textarea>
             </div>
+            <div class="field">
+                <label asp-for="Input.ImageUrl">URL da foto</label>
+                <input asp-for="Input.ImageUrl" type="url" placeholder="https://..." />
+            </div>
             <button type="submit">Salvar</button>
         </form>
     </details>
@@ -46,6 +50,16 @@ else
         @foreach (var k in Model.Activities)
         {
             <div class="docket-card">
+                <div class="docket-card-photo">
+                    @if (!string.IsNullOrWhiteSpace(k.ImageUrl))
+                    {
+                        <img src="@k.ImageUrl" alt="" />
+                    }
+                    else
+                    {
+                        <span class="docket-card-photo-empty">Sem foto</span>
+                    }
+                </div>
                 <span class="docket-card-category">@k.AgeRange</span>
                 <h3>@k.Name</h3>
                 <p class="docket-card-meta">@k.Schedule &middot; @k.Location</p>
@@ -79,6 +93,10 @@ else
                         <div class="field">
                             <label>Descrição</label>
                             <textarea name="description">@k.Description</textarea>
+                        </div>
+                        <div class="field">
+                            <label>URL da foto</label>
+                            <input name="imageUrl" type="url" value="@k.ImageUrl" placeholder="https://..." />
                         </div>
                         <div class="field">
                             <label>Status</label>

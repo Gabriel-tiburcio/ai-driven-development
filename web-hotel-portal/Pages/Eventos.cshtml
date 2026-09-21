@@ -35,6 +35,10 @@
                 <label asp-for="Input.Location">Local</label>
                 <input asp-for="Input.Location" required />
             </div>
+            <div class="field">
+                <label asp-for="Input.ImageUrl">URL da foto</label>
+                <input asp-for="Input.ImageUrl" type="url" placeholder="https://..." />
+            </div>
             <button type="submit">Salvar</button>
         </form>
     </details>
@@ -50,6 +54,16 @@ else
         @foreach (var evt in Model.Events)
         {
             <div class="docket-card">
+                <div class="docket-card-photo">
+                    @if (!string.IsNullOrWhiteSpace(evt.ImageUrl))
+                    {
+                        <img src="@evt.ImageUrl" alt="" />
+                    }
+                    else
+                    {
+                        <span class="docket-card-photo-empty">Sem foto</span>
+                    }
+                </div>
                 <span class="docket-card-category">@evt.Category</span>
                 <h3>@evt.Name</h3>
                 <div class="docket-card-meta">
@@ -90,6 +104,10 @@ else
                         <div class="field">
                             <label>Local</label>
                             <input name="location" value="@evt.Location" required />
+                        </div>
+                        <div class="field">
+                            <label>URL da foto</label>
+                            <input name="imageUrl" type="url" value="@evt.ImageUrl" placeholder="https://..." />
                         </div>
                         <div class="field">
                             <label>Status</label>

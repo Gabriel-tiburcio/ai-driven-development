@@ -16,7 +16,7 @@ export default function HotelEntry() {
       .getHotelByCode(code)
       .then((hotel) => {
         setHotel(hotel);
-        navigate("/hub", { replace: true });
+        navigate("/hoje", { replace: true });
       })
       .catch(() => setError("Não foi possível encontrar este hotel. Verifique o QR code ou fale com a recepção."));
     // eslint-disable-next-line react-hooks/exhaustive-deps

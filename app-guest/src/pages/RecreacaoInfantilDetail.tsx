@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
+import CategoryThumb from "../components/CategoryThumb";
 import { useGuest } from "../context/GuestContext";
 import type { KidsActivity } from "../types";
 
@@ -59,6 +60,10 @@ export default function RecreacaoInfantilDetail() {
       <button className="link-back" onClick={() => navigate(-1)}>
         &larr; Voltar
       </button>
+
+      <div className="hero-photo">
+        <CategoryThumb imageUrl={activity.imageUrl} kind="kids" />
+      </div>
 
       <h1>{activity.name}</h1>
       <span className="badge">{activity.ageRange}</span>

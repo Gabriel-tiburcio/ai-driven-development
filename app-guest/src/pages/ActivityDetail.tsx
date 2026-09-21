@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
+import CategoryThumb from "../components/CategoryThumb";
 import { useGuest } from "../context/GuestContext";
 import type { Activity, ActivitySlot } from "../types";
 
@@ -48,8 +49,8 @@ export default function ActivityDetailPage() {
         <div className="success-box">
           <h2>Reserva confirmada!</h2>
           <p>Você vai receber lembretes sobre esta atividade.</p>
-          <button onClick={() => navigate("/reservations")}>Ver minhas reservas</button>
-          <button className="secondary" onClick={() => navigate("/atividades")}>
+          <button onClick={() => navigate("/hoje")}>Ver minha agenda</button>
+          <button className="secondary" onClick={() => navigate("/explorar")}>
             Voltar ao catálogo
           </button>
         </div>
@@ -70,6 +71,10 @@ export default function ActivityDetailPage() {
       <button className="link-back" onClick={() => navigate(-1)}>
         &larr; Voltar
       </button>
+
+      <div className="hero-photo">
+        <CategoryThumb imageUrl={activity.imageUrl} category={activity.category} kind="activity" />
+      </div>
 
       <h1>{activity.name}</h1>
       <span className="badge">{activity.category}</span>

@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { api } from "../api/client";
 import ChatMarkdown from "../components/ChatMarkdown";
+import Icon from "../components/Icon";
 import { useGuest } from "../context/GuestContext";
 import type { ConciergeMessage } from "../types";
+
+const SUGGESTIONS = ["Quais restaurantes estão abertos?", "O que posso fazer hoje?", "Horário do check-out?"];
 
 let nextMessageId = 0;
 function newMessageId() {
@@ -17,13 +20,12 @@ function now() {
 
 export default function Concierge() {
   const { hotel } = useGuest();
-  const navigate = useNavigate();
 
   const [messages, setMessages] = useState<ConciergeMessage[]>([
     {
       id: newMessageId(),
       sender: "concierge",
-      text: `Olá! Sou o Concierge Premium do ${hotel?.name ?? "hotel"}. Como posso ajudar na sua estadia?`,
+      text: `Olá! Sou o HotelarIA, assistente digital do ${hotel?.name ?? "hotel"}. Como posso ajudar durante sua estadia?`,
       timestamp: now(),
     },
   ]);
@@ -33,9 +35,7 @@ export default function Concierge() {
 
   if (!hotel) return <Navigate to="/" replace />;
 
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const text = draft.trim();
+  const sendText = async (text: string) => {
     if (!text || sending) return;
 
     const guestMessage: ConciergeMessage = { id: newMessageId(), sender: "guest", text, timestamp: now() };
@@ -56,16 +56,22 @@ export default function Concierge() {
     }
   };
 
+  const handleSend = (e: React.FormEvent) => {
+    e.preventDefault();
+    sendText(draft.trim());
+  };
+
   return (
     <div className="screen">
-      <button className="link-back" onClick={() => navigate(-1)}>
-        &larr; Voltar
-      </button>
-
-      <header className="page-header">
-        <h1>Concierge Premium</h1>
-        <p className="subtitle">Converse e receba recomendações sobre {hotel.name}.</p>
-      </header>
+      <div className="concierge-header">
+        <span className="concierge-avatar">
+          <Icon name="headset" />
+        </span>
+        <div>
+          <h1>HotelarIA</h1>
+          <p className="subtitle">Assistente Virtual</p>
+        </div>
+      </div>
 
       <div className="chat-thread">
         {messages.map((m) => (
@@ -81,17 +87,27 @@ export default function Concierge() {
         )}
       </div>
 
+      {messages.length === 1 && !sending && (
+        <div className="suggestion-chip-row">
+          {SUGGESTIONS.map((s) => (
+            <button key={s} className="suggestion-chip" onClick={() => sendText(s)}>
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
+
       {error && <p className="error">{error}</p>}
 
       <form className="chat-input-row" onSubmit={handleSend}>
         <input
-          placeholder="Escreva sua mensagem..."
+          placeholder="Escreva sua mensagem"
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           disabled={sending}
         />
-        <button type="submit" disabled={sending || !draft.trim()}>
-          Enviar
+        <button type="submit" className="send-btn" disabled={sending || !draft.trim()} aria-label="Enviar">
+          <Icon name="send" />
         </button>
       </form>
     </div>

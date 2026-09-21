@@ -36,7 +36,7 @@ public class RecreacaoInfantilModel(ApiClient api) : PageModel
             Input.AgeRange,
             Input.Schedule,
             Input.Location,
-            null);
+            string.IsNullOrWhiteSpace(Input.ImageUrl) ? null : Input.ImageUrl);
 
         var ok = await api.CreateKidsActivityAsync(User.GetJwt()!, User.GetHotelId(), request);
         this.SetToast(ok, "Atividade criada com sucesso!", "Não foi possível criar a atividade.");
@@ -44,7 +44,7 @@ public class RecreacaoInfantilModel(ApiClient api) : PageModel
         return RedirectToPage();
     }
 
-    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string? description, string ageRange, string schedule, string location, bool isActive)
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string? description, string ageRange, string schedule, string location, string? imageUrl, bool isActive)
     {
         var request = new UpdateKidsActivityRequest(
             name,
@@ -52,7 +52,7 @@ public class RecreacaoInfantilModel(ApiClient api) : PageModel
             ageRange,
             schedule,
             location,
-            null,
+            string.IsNullOrWhiteSpace(imageUrl) ? null : imageUrl,
             isActive);
 
         var ok = await api.UpdateKidsActivityAsync(User.GetJwt()!, User.GetHotelId(), id, request);
@@ -74,5 +74,6 @@ public class RecreacaoInfantilModel(ApiClient api) : PageModel
         public string Schedule { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
         public string? Description { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

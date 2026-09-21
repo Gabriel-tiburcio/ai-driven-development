@@ -31,6 +31,10 @@
                 <label asp-for="Input.MenuHighlights">Destaques do cardápio (um por linha)</label>
                 <textarea asp-for="Input.MenuHighlights" placeholder="Risoto de camarão&#10;Filé ao molho madeira"></textarea>
             </div>
+            <div class="field">
+                <label asp-for="Input.ImageUrl">URL da foto</label>
+                <input asp-for="Input.ImageUrl" type="url" placeholder="https://..." />
+            </div>
             <button type="submit">Salvar</button>
         </form>
     </details>
@@ -46,6 +50,16 @@ else
         @foreach (var r in Model.Restaurants)
         {
             <div class="docket-card">
+                <div class="docket-card-photo">
+                    @if (!string.IsNullOrWhiteSpace(r.ImageUrl))
+                    {
+                        <img src="@r.ImageUrl" alt="" />
+                    }
+                    else
+                    {
+                        <span class="docket-card-photo-empty">Sem foto</span>
+                    }
+                </div>
                 <span class="docket-card-category">@r.CuisineType</span>
                 <h3>@r.Name</h3>
                 <p class="docket-card-meta">@r.Hours</p>
@@ -79,6 +93,10 @@ else
                         <div class="field">
                             <label>Destaques do cardápio (um por linha)</label>
                             <textarea name="menuHighlights">@string.Join("\n", r.MenuHighlights)</textarea>
+                        </div>
+                        <div class="field">
+                            <label>URL da foto</label>
+                            <input name="imageUrl" type="url" value="@r.ImageUrl" placeholder="https://..." />
                         </div>
                         <div class="field">
                             <label>Status</label>

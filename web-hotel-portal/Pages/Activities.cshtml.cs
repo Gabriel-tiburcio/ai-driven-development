@@ -33,7 +33,7 @@ public class ActivitiesModel(ApiClient api) : PageModel
             Input.Category,
             Input.Price,
             Input.DurationMinutes,
-            null);
+            string.IsNullOrWhiteSpace(Input.ImageUrl) ? null : Input.ImageUrl);
 
         var ok = await api.CreateActivityAsync(User.GetJwt()!, User.GetHotelId(), request);
         this.SetToast(ok, "Atividade criada com sucesso!", "Não foi possível criar a atividade.");
@@ -41,7 +41,7 @@ public class ActivitiesModel(ApiClient api) : PageModel
         return RedirectToPage();
     }
 
-    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string category, string? description, decimal price, int durationMinutes, bool isActive)
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string category, string? description, decimal price, int durationMinutes, string? imageUrl, bool isActive)
     {
         var request = new UpdateActivityRequest(
             name,
@@ -49,7 +49,7 @@ public class ActivitiesModel(ApiClient api) : PageModel
             category,
             price,
             durationMinutes,
-            null,
+            string.IsNullOrWhiteSpace(imageUrl) ? null : imageUrl,
             isActive);
 
         var ok = await api.UpdateActivityAsync(User.GetJwt()!, User.GetHotelId(), id, request);
@@ -71,5 +71,6 @@ public class ActivitiesModel(ApiClient api) : PageModel
         public string? Description { get; set; }
         public decimal Price { get; set; }
         public int DurationMinutes { get; set; } = 60;
+        public string? ImageUrl { get; set; }
     }
 }

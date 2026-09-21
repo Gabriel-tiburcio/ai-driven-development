@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
+import CategoryThumb from "../components/CategoryThumb";
 import { useGuest } from "../context/GuestContext";
 import type { EventItem } from "../types";
 
@@ -20,7 +21,7 @@ export default function EventoDetail() {
   }, [hotel, id]);
 
   if (!hotel) return <Navigate to="/" replace />;
-  if (!loading && !event) return <Navigate to="/eventos" replace />;
+  if (!loading && !event) return <Navigate to="/explorar" replace />;
 
   return (
     <div className="screen">
@@ -32,6 +33,10 @@ export default function EventoDetail() {
         <p>Carregando evento...</p>
       ) : (
         <>
+          <div className="hero-photo">
+            <CategoryThumb imageUrl={event.imageUrl} category={event.category} kind="event" />
+          </div>
+
           <h1>{event.name}</h1>
           <span className="badge">{event.category}</span>
           <p className="muted">

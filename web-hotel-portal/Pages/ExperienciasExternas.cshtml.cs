@@ -37,7 +37,7 @@ public class ExperienciasExternasModel(ApiClient api) : PageModel
             Input.Price,
             Input.DurationLabel,
             Input.Location,
-            null);
+            string.IsNullOrWhiteSpace(Input.ImageUrl) ? null : Input.ImageUrl);
 
         var ok = await api.CreateExternalExperienceAsync(User.GetJwt()!, User.GetHotelId(), request);
         this.SetToast(ok, "Experiência criada com sucesso!", "Não foi possível criar a experiência.");
@@ -45,9 +45,9 @@ public class ExperienciasExternasModel(ApiClient api) : PageModel
         return RedirectToPage();
     }
 
-    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string category, string description, decimal price, string durationLabel, string location, bool isActive)
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string category, string description, decimal price, string durationLabel, string location, string? imageUrl, bool isActive)
     {
-        var request = new UpdateExternalExperienceRequest(name, description, category, price, durationLabel, location, null, isActive);
+        var request = new UpdateExternalExperienceRequest(name, description, category, price, durationLabel, location, string.IsNullOrWhiteSpace(imageUrl) ? null : imageUrl, isActive);
         var ok = await api.UpdateExternalExperienceAsync(User.GetJwt()!, User.GetHotelId(), id, request);
         this.SetToast(ok, "Experiência atualizada com sucesso!", "Não foi possível salvar as alterações.");
         return RedirectToPage();
@@ -68,5 +68,6 @@ public class ExperienciasExternasModel(ApiClient api) : PageModel
         public decimal Price { get; set; }
         public string DurationLabel { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; }
     }
 }

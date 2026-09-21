@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import Icon from "../components/Icon";
 import { useGuest } from "../context/GuestContext";
 
 export default function Home() {
@@ -7,13 +8,13 @@ export default function Home() {
   const navigate = useNavigate();
   const [code, setCode] = useState("");
 
-  if (hotel) return <Navigate to="/hub" replace />;
+  if (hotel) return <Navigate to="/hoje" replace />;
 
   return (
-    <div className="screen center">
-      <img src="/logo.png" alt="AllStay" className="brand-logo" />
+    <div className="screen center qr-entry">
+      <Icon name="qrcode" className="qr-icon" />
       <h1>AllStay</h1>
-      <p className="muted">Escaneie o QR code no seu quarto para começar.</p>
+      <p className="subtitle">Escaneie o QR Code disponível no seu quarto para iniciar sua experiência.</p>
 
       <form
         className="reserve-form"

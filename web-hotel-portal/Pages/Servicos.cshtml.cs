@@ -36,7 +36,7 @@ public class ServicosModel(ApiClient api) : PageModel
             Input.Category,
             Input.Price,
             Input.DurationMinutes,
-            null);
+            string.IsNullOrWhiteSpace(Input.ImageUrl) ? null : Input.ImageUrl);
 
         var ok = await api.CreateServiceAsync(User.GetJwt()!, User.GetHotelId(), request);
         this.SetToast(ok, "Serviço criado com sucesso!", "Não foi possível criar o serviço.");
@@ -44,9 +44,9 @@ public class ServicosModel(ApiClient api) : PageModel
         return RedirectToPage();
     }
 
-    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string description, string category, decimal price, int durationMinutes, bool isActive)
+    public async Task<IActionResult> OnPostEditAsync(Guid id, string name, string description, string category, decimal price, int durationMinutes, string? imageUrl, bool isActive)
     {
-        var request = new UpdateServiceItemRequest(name, description, category, price, durationMinutes, null, isActive);
+        var request = new UpdateServiceItemRequest(name, description, category, price, durationMinutes, string.IsNullOrWhiteSpace(imageUrl) ? null : imageUrl, isActive);
         var ok = await api.UpdateServiceAsync(User.GetJwt()!, User.GetHotelId(), id, request);
         this.SetToast(ok, "Serviço atualizado com sucesso!", "Não foi possível salvar as alterações.");
         return RedirectToPage();
@@ -66,5 +66,6 @@ public class ServicosModel(ApiClient api) : PageModel
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public int DurationMinutes { get; set; } = 60;
+        public string? ImageUrl { get; set; }
     }
 }
